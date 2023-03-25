@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>android.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Fonts\MaterialIcons-Regular.ttf" />
+    <None Remove="Fonts\MaterialIconsOutlined-Regular.ttf" />
+    <None Remove="Fonts\MaterialIconsRound-Regular.ttf" />
+    <None Remove="Fonts\MaterialIconsTwoTone-Regular.ttf" />
+    <None Remove="Resources\App Icons\MainWindow\overtime.png" />
+    <None Remove="Resources\App Icons\MainWindow\planner.png" />
+    <None Remove="Resources\App Icons\MainWindow\setting.png" />
+    <None Remove="Resources\App Icons\MainWindow\tasks.png" />
+    <None Remove="Resources\default_background.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="android.ico" />
+    <Content Include="Resources\default_background.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\App Icons\MainWindow\overtime.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MainWindow\planner.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MainWindow\setting.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MainWindow\tasks.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="View\TasksPage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\MaterialIcons-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\MaterialIconsOutlined-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\MaterialIconsRound-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\MaterialIconsTwoTone-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
