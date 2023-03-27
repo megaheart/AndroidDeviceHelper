@@ -8,6 +8,6 @@ namespace AndroidDeviceHelper.View
 {
     interface IWindowPage
     {
-        //NavigateWindow NavigateWindow { get; set; }
+        void ResetPage();
     }
 }

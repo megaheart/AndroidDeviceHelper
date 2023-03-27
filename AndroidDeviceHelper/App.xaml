@@ -6,7 +6,7 @@
              xmlns:ctrl="clr-namespace:AndroidDeviceHelper.View.CustomizedControls"
              xmlns:m="clr-namespace:AndroidDeviceHelper.View.CustomizedModels"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             StartupUri="MainWindow.xaml">
+             Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -43,13 +43,15 @@
             <SolidColorBrush x:Key="Color_Control_UnderLine" Color="#F9A602"></SolidColorBrush>
             <SolidColorBrush x:Key="Color_Control_UnderLine_Light" Color="#FFF9C502"></SolidColorBrush>
             <!--#endregion-->
-            <!--#region -->
+            <!--#region Converters-->
             <conv:DockToColumns x:Key="DockToColumnsConverter"></conv:DockToColumns>
             <conv:DockToRows x:Key="DockToRowsConverter"></conv:DockToRows>
             <conv:Division x:Key="DividingConverter"></conv:Division>
             <conv:HalfOfHeightToCornerRadius x:Key="GetCornerRadiusFromHalfOfHeight"></conv:HalfOfHeightToCornerRadius>
             <conv:BoolToVisibility x:Key="BoolToVisibilityConverter"/>
+            <conv:HideEmptyCollection x:Key="HideEmptyCollectionConverter"></conv:HideEmptyCollection>
             <!--#endregion-->            
+            <!--#region Unknown Group-->
             <DrawingBrush x:Key="Gray_DashedLine" Viewport="0,0,8,7" ViewportUnits="Absolute" TileMode="Tile">
                 <DrawingBrush.Drawing>
                     <DrawingGroup>
@@ -230,76 +232,6 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <Style TargetType="TabItem">
-                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
-                <Setter Property="Cursor" Value="Hand"></Setter>
-                <Setter Property="Foreground" Value="{DynamicResource Color_Foreground_Dark2}"></Setter>
-                <Setter Property="FontSize" Value="14"></Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="TabItem">
-                            <Border Padding="{TemplateBinding Padding}" Background="{DynamicResource Color_Button_Background}">
-                                <ContentPresenter x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        ContentSource="Header">
-                                    <ContentPresenter.RenderTransform>
-                                        <ScaleTransform x:Name="scale" 
-                                                        CenterX="{Binding ElementName=ContentSite,Path=ActualWidth, Converter={StaticResource DividingConverter},ConverterParameter=2}"
-                                                        CenterY="{Binding ElementName=ContentSite,Path=ActualHeight, Converter={StaticResource DividingConverter},ConverterParameter=2}"></ScaleTransform>
-                                    </ContentPresenter.RenderTransform>
-                                </ContentPresenter>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1.1"></DoubleAnimation>
-                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1.1"></DoubleAnimation>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1"></DoubleAnimation>
-                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1"></DoubleAnimation>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Foreground" Value="{DynamicResource Color_Foreground}"></Setter>
-                    </Trigger>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Foreground" Value="{DynamicResource Color_Foreground_Dark}"></Setter>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="ctrl:CustomizedTabControl">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ctrl:CustomizedTabControl">
-                            <DockPanel>
-                                <UniformGrid DockPanel.Dock="{TemplateBinding TabStripPlacement}" HorizontalAlignment="Left" x:Name="HeaderPanel"
-                                     Rows="{TemplateBinding TabStripPlacement, Converter={StaticResource DockToRowsConverter}}"
-                                     Columns="{TemplateBinding TabStripPlacement, Converter={StaticResource DockToColumnsConverter}}" IsItemsHost="True" Background="Transparent" />
-                                <Grid>
-                                    <ContentPresenter x:Name="PART_SelectedContentHost" Grid.Row="1" ContentSource="SelectedContent"/>
-                                    <Line Panel.ZIndex="1" x:Name="PART_MainLine" StrokeThickness="3" Stroke="Gray" ></Line>
-                                    <Line Panel.ZIndex="2" x:Name="PART_SelectionLine" StrokeThickness="5" Stroke="{TemplateBinding ThemeColor}"></Line>
-                                </Grid>
-                            </DockPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <Style TargetType="TextBox">
                 <Setter Property="FontSize" Value="14"></Setter>
                 <Setter Property="Padding" Value="8,5,0,5"></Setter>
@@ -363,6 +295,395 @@
                     <TextBlock VerticalAlignment="Center" FontSize="14" Margin="7,0,0,0" Text="{Binding Content}"></TextBlock>
                 </StackPanel>
             </DataTemplate>
+            <!--#endregion-->
+            <!--#region TextBox, Label and UserControl like Text Box Style-->
+            <Style x:Key="BorderStyleForSearchBox" TargetType="Border">
+                <Setter Property="CornerRadius" Value="2"></Setter>
+                <Setter Property="Effect" Value="{DynamicResource Layer_TextBox}"></Setter>
+                <Setter Property="Background" Value="{DynamicResource Color_TextBox_Background}"></Setter>
+                <Style.Triggers>
+                    <Trigger Property="DataContext" Value="{x:Null}">
+                        <Setter Property="Background" Value="{DynamicResource Color_Popup_Background}"></Setter>
+                        <Setter Property="Effect" Value="{DynamicResource Layer_SearchBox}"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="UserControlLikeTextBoxStyle" TargetType="UserControl">
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Effect" Value="{DynamicResource Layer_TextBox}"></Setter>
+                <Setter Property="Padding" Value="15,8,0,8"></Setter>
+                <Setter Property="Template" Value="{StaticResource DisablePaddingProperty}"></Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Effect" Value="{x:Null}"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style x:Key="TextBox_DefaultStyle" TargetType="TextBox">
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource Color_Foreground}"></Setter>
+                <Setter Property="CaretBrush" Value="{DynamicResource Color_Foreground}"></Setter>
+                <Setter Property="Effect" Value="{DynamicResource Layer_TextBox}"></Setter>
+                <Setter Property="Padding" Value="15,8,0,8"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Grid>
+                                <Border x:Name="b" SnapsToDevicePixels="True" CornerRadius="2" BorderThickness="0"
+                                    BorderBrush="{StaticResource Color_Control_UnderLine}" Background="{DynamicResource Color_TextBox_Background}">
+                                </Border>
+                                <ScrollViewer x:Name="PART_ContentHost" VerticalScrollBarVisibility="Auto"></ScrollViewer>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsKeyboardFocused" Value="True">
+                                    <Setter TargetName="b" Property="BorderThickness" Value="0,0,0,2"></Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="LabelBox_DefaultStyle" TargetType="{x:Type ctrl:LabelBox}">
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Effect" Value="{DynamicResource Layer_TextBox}"></Setter>
+                <Setter Property="Padding" Value="15,8,0,8"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ctrl:LabelBox}">
+                            <Border BorderThickness="0" CornerRadius="{TemplateBinding CornerRadius}" Background="{DynamicResource Color_LabelBox}">
+                                <DockPanel x:Name="_main">
+                                    <Button x:Name="PART_label" DataContext="{TemplateBinding CornerRadius}"
+                                            DockPanel.Dock="Left" Template="{DynamicResource Button_LabelTemplate}" 
+                                            Foreground="{DynamicResource Color_Foreground}">
+                                        Hello
+                                    </Button>
+                                    <ContentPresenter></ContentPresenter>
+                                </DockPanel>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            
+            <!--#endregion-->
+            <!--#region Button, ToggleButton, CheckBox, RadioButton Style-->
+            <ControlTemplate x:Key="Button_LabelTemplate" TargetType="Button">
+                <Border Background="{DynamicResource Color_LabelBox}" CornerRadius="{Binding}">
+                    <ContentPresenter></ContentPresenter>
+                </Border>
+            </ControlTemplate>
+            <Style x:Key="FloorButtonStyle" TargetType="{x:Type ButtonBase}">
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Setter Property="FontSize" Value="25"></Setter>
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource Color_FloorButton_Foreground}"></Setter>
+                <Setter Property="BorderThickness" Value="0"></Setter>
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ButtonBase">
+                            <Grid>
+                                <Border CornerRadius="2" x:Name="border" Background="{TemplateBinding Background}"
+                                                        BorderBrush="{StaticResource Color_Control_UnderLine}" BorderThickness="{TemplateBinding BorderThickness}"></Border>
+                                <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                                                  VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <ContentPresenter.RenderTransform>
+                                        <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"
+                                                            CenterX="{Binding ElementName=border,Path=ActualWidth, Converter={StaticResource DividingConverter},ConverterParameter=2}"
+                                                            CenterY="{Binding ElementName=border,Path=ActualHeight, Converter={StaticResource DividingConverter},ConverterParameter=2}"></ScaleTransform>
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="0.94"></DoubleAnimation>
+                                                <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="0.94"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1"></DoubleAnimation>
+                                                <DoubleAnimation Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#4C808080"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#66808080"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{DynamicResource Color_FloorButton_Disabled_Foreground}"></Setter>
+                        <Setter Property="BorderThickness" Value="0"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type Button}" x:Key="JellyButtonStyle">
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="Padding" Value="8,7"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Background" Value="#FF232323"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ButtonBase">
+                            <Border x:Name="b" CornerRadius="2" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+                                                    BorderThickness="0" Background="{TemplateBinding Background}">
+                                <Border.RenderTransform>
+                                    <TranslateTransform x:Name="transform" Y="0"></TranslateTransform>
+                                </Border.RenderTransform>
+                                <Border.Effect>
+                                    <DropShadowEffect x:Name="shadow" Direction="270" BlurRadius="4" ShadowDepth="2" Opacity="0.7"
+                                                                      Color="Black"/>
+                                </Border.Effect>
+                                <Border x:Name="border" Background="Transparent" CornerRadius="2" Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
+                                </Border>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="border" Property="Background" Value="#33000000"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation To="2" Duration="0:0:0.1" Storyboard.TargetName="transform" Storyboard.TargetProperty="Y"></DoubleAnimation>
+                                                <DoubleAnimation To="0" Duration="0:0:0.1" Storyboard.TargetName="shadow" Storyboard.TargetProperty="BlurRadius"></DoubleAnimation>
+                                                <DoubleAnimation To="0" Duration="0:0:0.1" Storyboard.TargetName="shadow" Storyboard.TargetProperty="ShadowDepth"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation To="0" Duration="0:0:0.1" Storyboard.TargetName="transform" Storyboard.TargetProperty="Y"></DoubleAnimation>
+                                                <DoubleAnimation To="4" Duration="0:0:0.1" Storyboard.TargetName="shadow" Storyboard.TargetProperty="BlurRadius"></DoubleAnimation>
+                                                <DoubleAnimation To="2" Duration="0:0:0.1" Storyboard.TargetName="shadow" Storyboard.TargetProperty="ShadowDepth"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource Color_JellyButton_Disabled_Foreground}"></Setter>
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Color_JellyButton_Disabled_Background}"></Setter>
+                                    <Setter TargetName="b" Property="Effect" Value="{x:Null}"></Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type Button}" x:Key="RoundFloatButtonStyle">
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Background" Value="#FF232323"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ButtonBase">
+                            <Border x:Name="border" CornerRadius="{TemplateBinding ActualHeight, Converter={StaticResource GetCornerRadiusFromHalfOfHeight}}" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}"
+                                                    BorderThickness="0" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                <Border.RenderTransform>
+                                    <ScaleTransform x:Name="scale" ScaleX="1" ScaleY="1"
+                                                            CenterX="{Binding ElementName=border,Path=ActualWidth, Converter={StaticResource DividingConverter},ConverterParameter=2}"
+                                                            CenterY="{Binding ElementName=border,Path=ActualHeight, Converter={StaticResource DividingConverter},ConverterParameter=2}"></ScaleTransform>
+                                </Border.RenderTransform>
+                                <Border.Effect>
+                                    <DropShadowEffect x:Name="shadow" Direction="270" BlurRadius="3" ShadowDepth="0" Opacity="1"
+                                                                      Color="Black"/>
+                                </Border.Effect>
+                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"></ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard x:Name="Hovering">
+                                            <Storyboard>
+                                                <DoubleAnimation From="1" To="1.07" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX"></DoubleAnimation>
+                                                <DoubleAnimation From="1" To="1.07" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <RemoveStoryboard BeginStoryboardName="Pressed"></RemoveStoryboard>
+                                        <BeginStoryboard x:Name="Hovered">
+                                            <Storyboard>
+                                                <DoubleAnimation From="1.07" To="1" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX"></DoubleAnimation>
+                                                <DoubleAnimation From="1.07" To="1" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Trigger.EnterActions>
+                                        <RemoveStoryboard BeginStoryboardName="Hovering"></RemoveStoryboard>
+                                        <BeginStoryboard x:Name="Pressing">
+                                            <Storyboard>
+                                                <DoubleAnimation From="1.07" To="1" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX"></DoubleAnimation>
+                                                <DoubleAnimation From="1.07" To="1" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY"></DoubleAnimation>
+                                                <DoubleAnimation To="0" Duration="0:0:0" Storyboard.TargetName="shadow" Storyboard.TargetProperty="BlurRadius"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimation From="1" To="1.07" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX"></DoubleAnimation>
+                                                <DoubleAnimation From="1" To="1.07" Duration="0:0:0" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY"></DoubleAnimation>
+                                                <DoubleAnimation To="3" Duration="0:0:0" Storyboard.TargetName="shadow" Storyboard.TargetProperty="BlurRadius"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="{DynamicResource Color_JellyButton_Disabled_Foreground}"></Setter>
+                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource Color_JellyButton_Disabled_Background}"></Setter>
+                                    <Setter TargetName="border" Property="Effect" Value="{x:Null}"></Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="FloorToggleButtonStyle" TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource FloorButtonStyle}">
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="BorderThickness" Value="0,0,0,2.5"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="Height" Value="25"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource Color_Foreground}"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <StackPanel Orientation="Horizontal">
+                                <Grid Height="{TemplateBinding Height}" Width="{TemplateBinding Height}">
+                                    <Border CornerRadius="3" x:Name="b" Margin="3" Background="Transparent">
+                                    </Border>
+                                    <TextBlock x:Name="checktxt" FontFamily="{StaticResource MaterialIcons}" Foreground="{DynamicResource Color_FloorButton_Foreground}" FontSize="{TemplateBinding Height}"></TextBlock>
+                                </Grid>
+                                <ContentPresenter Margin="5,0,0,0" VerticalAlignment="Center"></ContentPresenter>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="checktxt" Property="Text" Value="check_box_outline_blank"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="Gray"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="b" Property="Background" Value="#6C808080"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="checktxt" Property="Text" Value="check_box"></Setter>
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{StaticResource Color_Control_UnderLine}"></Setter>
+                                    <Setter TargetName="b" Property="Background" Value="Transparent"></Setter>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsChecked" Value="True"></Condition>
+                                        <Condition Property="IsMouseOver" Value="True"></Condition>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{DynamicResource Color_Control_UnderLine_Light}"></Setter>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsChecked" Value="True"></Condition>
+                                        <Condition Property="IsPressed" Value="True"></Condition>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{DynamicResource Color_Control_UnderLine}"></Setter>
+                                </MultiTrigger>
+                                <Trigger Property="IsChecked" Value="{x:Null}">
+                                    <Setter TargetName="checktxt" Property="Text" Value="indeterminate_check_box"></Setter>
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{StaticResource Color_Control_UnderLine}"></Setter>
+                                    <Setter TargetName="b" Property="Background" Value="Transparent"></Setter>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsChecked" Value="{x:Null}"></Condition>
+                                        <Condition Property="IsMouseOver" Value="True"></Condition>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{DynamicResource Color_Control_UnderLine_Light}"></Setter>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsChecked" Value="{x:Null}"></Condition>
+                                        <Condition Property="IsPressed" Value="True"></Condition>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{DynamicResource Color_Control_UnderLine}"></Setter>
+                                </MultiTrigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{DynamicResource Color_FloorButton_Disabled_Foreground}"></Setter>
+                                    <Setter Property="Foreground" Value="{DynamicResource Color_FloorButton_Disabled_Foreground}"></Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="RadioButton">
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="Height" Value="25"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource Color_Foreground}"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <StackPanel Orientation="Horizontal">
+                                <Grid Height="{TemplateBinding Height}" Width="{TemplateBinding Height}">
+                                    <TextBlock x:Name="b" Text="circle" FontFamily="{StaticResource MaterialIcons}" Foreground="Transparent" FontSize="{TemplateBinding Height}"></TextBlock>
+                                    <TextBlock x:Name="checktxt" FontFamily="{StaticResource MaterialIcons}" Foreground="{DynamicResource Color_FloorButton_Foreground}" FontSize="{TemplateBinding Height}"></TextBlock>
+                                </Grid>
+                                <ContentPresenter Margin="5,0,0,0" VerticalAlignment="Center"></ContentPresenter>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="Gray"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="b" Property="Foreground" Value="#6C808080"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="checktxt" Property="Text" Value="radio_button_checked"></Setter>
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{StaticResource Color_Control_UnderLine}"></Setter>
+                                    <Setter TargetName="b" Property="Foreground" Value="Transparent"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="False">
+                                    <Setter TargetName="checktxt" Property="Text" Value="radio_button_unchecked"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="checktxt" Property="Foreground" Value="{DynamicResource Color_FloorButton_Disabled_Foreground}"></Setter>
+                                    <Setter Property="Foreground" Value="{DynamicResource Color_FloorButton_Disabled_Foreground}"></Setter>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--#endregion-->
             <!--#region ScrollViewer Style-->
             <Style x:Key="ScrollBarLineButton_AutoToggleStyle" TargetType="{x:Type RepeatButton}">
                 <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -837,6 +1158,90 @@
                                             <Setter TargetName="PART_EditableTextBox" Property="IsDropDownOpen" Value="True"/>
                                         </Trigger>-->
                             </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <!--#endregion-->
+            <!--#region Tab Style-->
+            <Style TargetType="TabItem" x:Key="TabItemStyleForTabControlSeparationStyle">
+                <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+                <Setter Property="Cursor" Value="Hand"></Setter>
+                <Setter Property="Foreground" Value="{DynamicResource Color_Foreground_Dark2}"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabItem">
+                            <Border Padding="{TemplateBinding Padding}" Background="{DynamicResource Color_Button_Background}">
+                                <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header">
+                                    <ContentPresenter.RenderTransform>
+                                        <ScaleTransform x:Name="scale" 
+                                                        CenterX="{Binding ElementName=ContentSite,Path=ActualWidth, Converter={StaticResource DividingConverter},ConverterParameter=2}"
+                                                        CenterY="{Binding ElementName=ContentSite,Path=ActualHeight, Converter={StaticResource DividingConverter},ConverterParameter=2}"></ScaleTransform>
+                                    </ContentPresenter.RenderTransform>
+                                </ContentPresenter>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1.1"></DoubleAnimation>
+                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1.1"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1"></DoubleAnimation>
+                                                <DoubleAnimation Duration="0:0:0.15" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1"></DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="{DynamicResource Color_Foreground}"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter Property="Foreground" Value="{DynamicResource Color_Foreground_Dark}"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="TabControl" x:Key="TabControlSeparationStyle">
+                <Setter Property="ItemContainerStyle" Value="{StaticResource TabItemStyleForTabControlSeparationStyle}"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabControl">
+                            <DockPanel>
+                                <UniformGrid DockPanel.Dock="{TemplateBinding TabStripPlacement}" HorizontalAlignment="Left" x:Name="HeaderPanel"
+                                     Rows="{TemplateBinding TabStripPlacement, Converter={StaticResource DockToRowsConverter}}"
+                                     Columns="{TemplateBinding TabStripPlacement, Converter={StaticResource DockToColumnsConverter}}" IsItemsHost="True" Background="Transparent">
+
+                                </UniformGrid>
+                                <Grid>
+                                    <ContentPresenter x:Name="PART_SelectedContentHost" Grid.Row="1" ContentSource="SelectedContent"/>
+                                </Grid>
+                            </DockPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="TabControl" x:Key="HeaderlessTabControlStyle">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TabControl">
+                            <Grid>
+                                <ContentPresenter x:Name="PART_SelectedContentHost" Grid.Row="1" ContentSource="SelectedContent"/>
+                            </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

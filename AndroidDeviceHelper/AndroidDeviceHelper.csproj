@@ -14,8 +14,11 @@
     <None Remove="Fonts\MaterialIconsRound-Regular.ttf" />
     <None Remove="Fonts\MaterialIconsTwoTone-Regular.ttf" />
     <None Remove="Resources\App Icons\MainWindow\overtime.png" />
+    <None Remove="Resources\App Icons\MainWindow\picture.png" />
     <None Remove="Resources\App Icons\MainWindow\planner.png" />
     <None Remove="Resources\App Icons\MainWindow\setting.png" />
+    <None Remove="Resources\App Icons\MainWindow\shortcuts.png" />
+    <None Remove="Resources\App Icons\MainWindow\tab.png" />
     <None Remove="Resources\App Icons\MainWindow\tasks.png" />
     <None Remove="Resources\default_background.jpg" />
   </ItemGroup>
@@ -28,6 +31,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\App Icons\MainWindow\picture.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MainWindow\shortcuts.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\App Icons\MainWindow\overtime.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -37,13 +53,12 @@
     <Resource Include="Resources\App Icons\MainWindow\setting.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\App Icons\MainWindow\tab.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\App Icons\MainWindow\tasks.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="View\TasksPage\" />
   </ItemGroup>
 
   <ItemGroup>

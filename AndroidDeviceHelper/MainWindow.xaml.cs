@@ -1,8 +1,12 @@
-﻿using AndroidDeviceHelper.Native;
+﻿using AndroidDeviceHelper.Models;
+using AndroidDeviceHelper.Native;
+using AndroidDeviceHelper.View.TasksPage.SettingPage;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,15 +29,22 @@ namespace AndroidDeviceHelper
         {
             InitializeComponent();
             WindowResizer = new WindowResizer(this);
+            
         }
         private void MoveToTasksPage(object sender, RoutedEventArgs e)
         {
 
         }
-        
+        private SettingPage? _settingPage = null;
         private void MoveToSettingPage(object sender, RoutedEventArgs e)
         {
-
+            if(_settingPage == null) _settingPage = new SettingPage();
+            _settingPage.LoadPage();
+            Main.Content = _settingPage;
+        }
+        private void MoveToBlankPage(object sender, RoutedEventArgs e)
+        {
+            Main.Content = null;
         }
         #region Window resizer
         WindowResizer WindowResizer;

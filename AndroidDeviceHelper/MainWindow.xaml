@@ -19,8 +19,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Window">
-                        <Grid Background="{TemplateBinding Background}" MouseLeftButtonDown="MoveWindow">
-                            <!--<Border Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Border>-->
+                        <Grid Background="{TemplateBinding Background}">
+                            <Border Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseLeftButtonDown="MoveWindow"></Border>
                             <ContentPresenter Margin="25"></ContentPresenter>
                             <Thumb x:Name="top" Height="6" Margin="14,0" VerticalAlignment="Top" Cursor="SizeNS" Opacity="0" PreviewMouseLeftButtonDown="Resize"/>
                             <Thumb x:Name="topLeft" Height="14" Width="14" VerticalAlignment="Top" HorizontalAlignment="Left" Cursor="SizeNWSE"  Opacity="0" PreviewMouseLeftButtonDown="Resize"/>
@@ -46,24 +46,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <ContentControl x:Name="Main" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0">
-            <Grid MinHeight="400" MinWidth="400" VerticalAlignment="Center" HorizontalAlignment="Center" Background="{DynamicResource Color_Background}">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="400" Margin="20">
-                    <ComboBox Width="250"  
-                      Style="{StaticResource ComboBoxWithoutTextBoxStyle}" 
-                      ItemTemplate="{StaticResource DataTemplateForComboBoxIconSelection}" SelectedIndex="0">
-                        <local:MaterialIconsComboBoxSelection IconCode="date_range" 
-                                                Content="Daily"/>
-                        <local:MaterialIconsComboBoxSelection IconCode="view_week" 
-                                                Content="Weekly"/>
-                        <local:MaterialIconsComboBoxSelection IconCode="event" 
-                                                Content="Monthly"/>
-                        <local:MaterialIconsComboBoxSelection IconCode="fiber_manual_record" 
-                                                Content="Once"/>
-                        <local:MaterialIconsComboBoxSelection IconCode="settings" 
-                                                Content="Custom"/>
-                    </ComboBox>
-                </StackPanel>
-            </Grid>
+            
         </ContentControl>
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <StackPanel.Resources>
@@ -192,19 +175,24 @@
                     </Setter>
                 </Style>
             </StackPanel.Resources>
-            <RadioButton GroupName="MenuTabBtn" Checked="MoveToTasksPage" Margin="0">
+            <RadioButton GroupName="MenuTabBtn" Checked="MoveToBlankPage" Margin="0">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Resources\App Icons\MainWindow\tab.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
+                    <TextBlock VerticalAlignment="Center" Text="Home"></TextBlock>
+                </StackPanel>
+            </RadioButton>
+            <RadioButton GroupName="MenuTabBtn" Checked="MoveToTasksPage">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Resources\App Icons\MainWindow\tasks.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
                     <TextBlock VerticalAlignment="Center" Text="Task"></TextBlock>
                 </StackPanel>
             </RadioButton>
-            <RadioButton GroupName="MenuTabBtn" Checked="MoveToSettingPage">
+            <RadioButton GroupName="MenuTabBtn" Checked="MoveToSettingPage" IsChecked="True">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Resources\App Icons\MainWindow\setting.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
                     <TextBlock VerticalAlignment="Center" Text="Setting"></TextBlock>
                 </StackPanel>
             </RadioButton>
-
         </StackPanel>
     </Grid>
 </Window>
