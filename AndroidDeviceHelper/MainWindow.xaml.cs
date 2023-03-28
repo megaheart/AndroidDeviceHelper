@@ -1,6 +1,8 @@
 ﻿using AndroidDeviceHelper.Models;
 using AndroidDeviceHelper.Native;
+using AndroidDeviceHelper.View;
 using AndroidDeviceHelper.View.TasksPage.SettingPage;
+using AndroidDeviceHelper.View.TasksPage.TaskPage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,15 +33,18 @@ namespace AndroidDeviceHelper
             WindowResizer = new WindowResizer(this);
             
         }
+        private IWindowPage _taskPage = null;
         private void MoveToTasksPage(object sender, RoutedEventArgs e)
         {
-
+            if (_taskPage == null) _taskPage = new TaskPage();
+            _taskPage.ResetPage();
+            Main.Content = _taskPage;
         }
-        private SettingPage? _settingPage = null;
+        private IWindowPage _settingPage = null;
         private void MoveToSettingPage(object sender, RoutedEventArgs e)
         {
             if(_settingPage == null) _settingPage = new SettingPage();
-            _settingPage.LoadPage();
+            _settingPage.ResetPage();
             Main.Content = _settingPage;
         }
         private void MoveToBlankPage(object sender, RoutedEventArgs e)

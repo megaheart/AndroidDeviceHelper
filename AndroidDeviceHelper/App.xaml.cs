@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Text;
 
 namespace AndroidDeviceHelper
 {
@@ -20,6 +21,7 @@ namespace AndroidDeviceHelper
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             try
             {
                 using (var fileStream = File.OpenRead("settings.json"))

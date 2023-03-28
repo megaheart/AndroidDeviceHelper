@@ -4,9 +4,138 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AndroidDeviceHelper.View.TasksPage.TaskPage"
+             xmlns:m="clr-namespace:AndroidDeviceHelper.Models"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <UserControl.Resources>
+        <Style TargetType="TabItem" x:Key="TabItemStyleForTabControlSeparationStyle">
+            <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+            <Setter Property="Cursor" Value="Hand"></Setter>
+            <Setter Property="Foreground" Value="{DynamicResource Color_Foreground_Dark2}"></Setter>
+            <Setter Property="Background" Value="{DynamicResource Color_Button_Background}"></Setter>
+            <Setter Property="FontSize" Value="14"></Setter>
+            <Setter Property="Padding" Value="5,0,20,0"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}"
+                                CornerRadius="3">
+                            <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        ContentSource="Header">
+                                <ContentPresenter.RenderTransform>
+                                    <ScaleTransform x:Name="scale" 
+                                                        CenterX="{Binding ElementName=ContentSite,Path=ActualWidth, Converter={StaticResource DividingConverter},ConverterParameter=2}"
+                                                        CenterY="{Binding ElementName=ContentSite,Path=ActualHeight, Converter={StaticResource DividingConverter},ConverterParameter=2}"></ScaleTransform>
+                                </ContentPresenter.RenderTransform>
+                            </ContentPresenter>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.05" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1.1"></DoubleAnimation>
+                                            <DoubleAnimation Duration="0:0:0.05" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1.1"></DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.05" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleX" To="1"></DoubleAnimation>
+                                            <DoubleAnimation Duration="0:0:0.05" Storyboard.TargetName="scale" Storyboard.TargetProperty="ScaleY" To="1"></DoubleAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource Color_Foreground}"></Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="{DynamicResource Color_Foreground_Dark}"></Setter>
+                    <!--<Setter Property="FontWeight" Value="DemiBold"></Setter>-->
+                    <Setter Property="Background" Value="#66808080"></Setter>
+                    <Setter Property="Cursor" Value="Arrow"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TabControl" x:Key="TabControlSeparationStyle">
+            <Setter Property="ItemContainerStyle" Value="{StaticResource TabItemStyleForTabControlSeparationStyle}"></Setter>
+            <Setter Property="TabStripPlacement" Value="Right"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <DockPanel>
+                            <Border DockPanel.Dock="{TemplateBinding TabStripPlacement}" Background="{StaticResource Color_Button_Background}" 
+                                    Margin="15,0,0,0" Padding="8,15,8,15" CornerRadius="5" Width="154" VerticalAlignment="Top">
+                                <UniformGrid HorizontalAlignment="Stretch" x:Name="HeaderPanel" IsItemsHost="True" VerticalAlignment="Top"
+                                     Rows="{TemplateBinding TabStripPlacement, Converter={StaticResource DockToRowsConverter}}"
+                                     Columns="{TemplateBinding TabStripPlacement, Converter={StaticResource DockToColumnsConverter}}" Background="Transparent">
+
+                                </UniformGrid>
+                            </Border>
+                            <!--<Border CornerRadius="5" Background="{StaticResource Color_Sheet}">-->
+                                <Grid>
+                                    <ContentPresenter x:Name="PART_SelectedContentHost" Grid.Row="1" ContentSource="SelectedContent"/>
+                                </Grid>
+                            <!--</Border>-->
+                        </DockPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel>
+        <Border CornerRadius="5" Background="{StaticResource Color_Sheet}" 
+                Height="60" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,18">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <ComboBox x:Name="ConnectionOptions_Combobox" SelectedIndex="0" VerticalAlignment="Center" Margin="35,0,10,0"
+                          Style="{StaticResource ComboBoxWithoutTextBoxStyle}" Width="200" Height="36">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type m:DeviceProfile}">
+                            <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource Color_FloorButton_Foreground}" Margin="15,0,0,0">
+                                <TextBlock x:Name="_symbol" VerticalAlignment="Center" Text="device_unknown" FontSize="18" FontFamily="{StaticResource MaterialIcons}"></TextBlock>
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" Margin="7,0,7,0" MaxWidth="110" FontSize="14"></TextBlock>
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="wifi">
+                                    <Setter TargetName="_symbol" Property="Text" Value="wifi"></Setter>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <!--<m:DeviceProfile Type="wifi" Name="Network"/>
+                    <m:DeviceProfile Type="wifi" Name="Network 2"/>-->
+                    
+                </ComboBox>
+            </StackPanel>
+        </Border>
+        <TabControl Style="{StaticResource TabControlSeparationStyle}">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="..\..\..\Resources\App Icons\MainWindow\application-window.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
+                        <TextBlock VerticalAlignment="Center" Text="Install Apk"></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <local:InstallingApkPanel DeviceProfile="{Binding ElementName=ConnectionOptions_Combobox, Path=SelectedItem, Mode=OneWay}"></local:InstallingApkPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="..\..\..\Resources\App Icons\MainWindow\send-file.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
+                        <TextBlock VerticalAlignment="Center" Text="File Transfer"></TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <local:TransferingFilesPanel></local:TransferingFilesPanel>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 </UserControl>

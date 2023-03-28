@@ -181,13 +181,13 @@
                     <TextBlock VerticalAlignment="Center" Text="Home"></TextBlock>
                 </StackPanel>
             </RadioButton>
-            <RadioButton GroupName="MenuTabBtn" Checked="MoveToTasksPage">
+            <RadioButton GroupName="MenuTabBtn" Checked="MoveToTasksPage" IsChecked="True">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Resources\App Icons\MainWindow\tasks.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
                     <TextBlock VerticalAlignment="Center" Text="Task"></TextBlock>
                 </StackPanel>
             </RadioButton>
-            <RadioButton GroupName="MenuTabBtn" Checked="MoveToSettingPage" IsChecked="True">
+            <RadioButton GroupName="MenuTabBtn" Checked="MoveToSettingPage">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Resources\App Icons\MainWindow\setting.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
                     <TextBlock VerticalAlignment="Center" Text="Setting"></TextBlock>

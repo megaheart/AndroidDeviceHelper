@@ -71,8 +71,15 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
                 if (brush is not null)
                 {
                     Window window = Window.GetWindow(this);
+                    brush.Freeze();
                     window.Background = brush;
                     isEdited = true;
+                    try
+                    {
+                        File.Delete(AppSettings.Current.BackgroundPath);
+                    }
+                    catch(Exception _) { }
+                    //AppSettings.Current.BackgroundPath = "Resources/background_" + Guid.NewGuid() + backgroundPath.Substring(backgroundPath.LastIndexOf("."));
                     AppSettings.Current.BackgroundPath = "Resources/background" + backgroundPath.Substring(backgroundPath.LastIndexOf("."));
                     File.Copy(backgroundPath, AppSettings.Current.BackgroundPath, true);
                     BackgroundPathInput.Text = "";
@@ -132,7 +139,7 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
             //Save Settings File
             if (isEdited)
             {
-                using (var fileStream = File.OpenWrite("settings.json"))
+                using (var fileStream = File.Open("settings.json", FileMode.Create))
                 {
                     JsonSerializer.SerializeAsync<AppSettings>(fileStream, AppSettings.Current).ConfigureAwait(false);
                 }

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
@@ -13,9 +13,11 @@
     <None Remove="Fonts\MaterialIconsOutlined-Regular.ttf" />
     <None Remove="Fonts\MaterialIconsRound-Regular.ttf" />
     <None Remove="Fonts\MaterialIconsTwoTone-Regular.ttf" />
+    <None Remove="Resources\App Icons\MainWindow\application-window.png" />
     <None Remove="Resources\App Icons\MainWindow\overtime.png" />
     <None Remove="Resources\App Icons\MainWindow\picture.png" />
     <None Remove="Resources\App Icons\MainWindow\planner.png" />
+    <None Remove="Resources\App Icons\MainWindow\send-file.png" />
     <None Remove="Resources\App Icons\MainWindow\setting.png" />
     <None Remove="Resources\App Icons\MainWindow\shortcuts.png" />
     <None Remove="Resources\App Icons\MainWindow\tab.png" />
@@ -35,7 +37,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\App Icons\MainWindow\application-window.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\App Icons\MainWindow\picture.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MainWindow\send-file.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\App Icons\MainWindow\shortcuts.png">
