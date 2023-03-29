@@ -37,6 +37,7 @@
             <SolidColorBrush x:Key="Yellow" Color="#e8b600"></SolidColorBrush>
             <SolidColorBrush x:Key="LightYellow" Color="#ffc800"></SolidColorBrush>
             <SolidColorBrush x:Key="DarkYellow" Color="#cca000"></SolidColorBrush>
+            <SolidColorBrush x:Key="Green_Foreground" Color="#FF63DD85"></SolidColorBrush>
             <SolidColorBrush x:Key="Green" Color="#2c902b"></SolidColorBrush>
             <SolidColorBrush x:Key="LightGreen" Color="#319d2f"></SolidColorBrush>
             <SolidColorBrush x:Key="DarkGreen" Color="#2b8929"></SolidColorBrush>
@@ -1245,6 +1246,145 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+            <!--#endregion-->
+            <!--#region Progress Bar-->
+            <Style TargetType="{x:Type ProgressBar}" x:Key="ProgressBarBar_LoadingWithStripeLinesStyle">
+                <Setter Property="Height" Value="8"></Setter>
+                <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+                <Setter Property="Background" Value="{StaticResource Color_ProgressBar_Background}"></Setter>
+                <Setter Property="Foreground" Value="{StaticResource Color_Control_UnderLine}"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ProgressBar">
+                            <Grid MinWidth="200">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Determinate" />
+                                        <VisualState x:Name="Indeterminate">
+                                            <Storyboard RepeatBehavior="Forever">
+                                                <!--<ObjectAnimationUsingKeyFrames  Duration="00:00:00"
+                                                                                            Storyboard.TargetName="PART_Indicator"
+                                                                                            Storyboard.TargetProperty="Background">
+                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00">
+                                                                    <DiscreteObjectKeyFrame.Value>
+                                                                        <SolidColorBrush>Transparent</SolidColorBrush>
+                                                                    </DiscreteObjectKeyFrame.Value>
+                                                                </DiscreteObjectKeyFrame>
+                                                            </ObjectAnimationUsingKeyFrames>-->
+                                                <RectAnimation  Storyboard.TargetName="Stripe"
+                                                                            Storyboard.TargetProperty="(Shape.Fill).(TileBrush.Viewport)"
+                                                                            Duration="0:0:1"
+                                                                            From="0,0,20,20" To="-20,0,20,20"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Border x:Name="PART_Track" CornerRadius="3" Background="{TemplateBinding Background}">
+
+                                </Border>
+                                <Border x:Name="PART_Indicator" CornerRadius="3"
+                                                    HorizontalAlignment="Left" Effect="{x:Null}"
+                                                    Background="{TemplateBinding Foreground}">
+                                    <Grid ClipToBounds="True" x:Name="Animation">
+                                        <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}" RadiusX="3" RadiusY="3"/>
+                                        <Rectangle x:Name="Stripe" Visibility="Collapsed" RadiusX="3" RadiusY="3">
+                                            <Rectangle.Fill>
+                                                <DrawingBrush TileMode="Tile" Stretch="Uniform" Viewport="0,0,20,20" ViewportUnits="Absolute">
+                                                    <DrawingBrush.Drawing>
+                                                        <GeometryDrawing Brush="#66484848">
+                                                            <GeometryDrawing.Geometry>
+                                                                <PathGeometry>
+                                                                    <PathGeometry.Figures>
+                                                                        <PathFigureCollection>
+                                                                            <PathFigure StartPoint="0,0">
+                                                                                <LineSegment Point="5,0"/>
+                                                                                <LineSegment Point="10,5"/>
+                                                                                <LineSegment Point="10,10"/>
+                                                                            </PathFigure>
+                                                                            <PathFigure StartPoint="0,5">
+                                                                                <LineSegment Point="5,10"/>
+                                                                                <LineSegment Point="0,10"/>
+                                                                            </PathFigure>
+                                                                        </PathFigureCollection>
+                                                                    </PathGeometry.Figures>
+                                                                </PathGeometry>
+                                                            </GeometryDrawing.Geometry>
+                                                        </GeometryDrawing>
+                                                    </DrawingBrush.Drawing>
+                                                </DrawingBrush>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsIndeterminate" Value="True">
+                                    <Setter TargetName="Stripe" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+
+            </Style>
+            <Style TargetType="{x:Type ProgressBar}" x:Key="ProgressBarBar_ClassicalStyle">
+                <Setter Property="Height" Value="8"></Setter>
+                <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+                <Setter Property="Background" Value="{StaticResource Color_ProgressBar_Background}"></Setter>
+                <Setter Property="Foreground" Value="{StaticResource Color_Control_UnderLine}"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ProgressBar">
+                            <Grid MinWidth="200">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Determinate" />
+                                        <VisualState x:Name="Indeterminate">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames  Duration="00:00:00"
+                                                                                            Storyboard.TargetName="PART_Indicator"
+                                                                                            Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="00:00:00">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <SolidColorBrush>Transparent</SolidColorBrush>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <!--<ObjectAnimationUsingKeyFrames  Duration="00:00:00"
+                                                                                            Storyboard.TargetName="PART_GlowRect"
+                                                                                            Storyboard.TargetProperty="Fill">
+                                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{TemplateBinding Foreground}">
+                                                                </DiscreteObjectKeyFrame>
+                                                            </ObjectAnimationUsingKeyFrames>-->
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Border x:Name="PART_Track" CornerRadius="3" Background="{TemplateBinding Background}">
+
+                                </Border>
+                                <Border x:Name="PART_Indicator" CornerRadius="3"
+                                                    HorizontalAlignment="Left"
+                                                    Background="{TemplateBinding Foreground}">
+                                    <Grid ClipToBounds="True" x:Name="Animation">
+                                        <Rectangle Width="230" x:Name="PART_GlowRect" Opacity="0">
+
+                                        </Rectangle>
+                                        <Rectangle
+                                                        Width="230" Opacity="1" Fill="{TemplateBinding Foreground}"
+                                                        HorizontalAlignment="Left"
+                                                        Margin="{Binding ElementName=PART_GlowRect, Path=Margin}" RadiusY="3" RadiusX="3">
+                                        </Rectangle>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+
             </Style>
             <!--#endregion-->
         </ResourceDictionary>

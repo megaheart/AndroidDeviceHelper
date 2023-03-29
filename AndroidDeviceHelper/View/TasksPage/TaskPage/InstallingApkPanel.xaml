@@ -35,29 +35,43 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="report" FontSize="22" VerticalAlignment="Center"
                                                FontFamily="{StaticResource MaterialIcons}" Margin="0,0,6,0"></TextBlock>
-                        <TextBlock FontSize="16" FontWeight="DemiBold" Text="Can't save current settings because:" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock FontSize="16" FontWeight="DemiBold" Text="Installation FAILED because:" VerticalAlignment="Center"></TextBlock>
                     </StackPanel>
                     <ItemsControl x:Name="ErrorMsgViewer" Margin="8,0,0,0">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="{x:Type sys:String}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="radio_button_checked" FontSize="12" VerticalAlignment="Center"
-                                               FontFamily="{StaticResource MaterialIcons}" Margin="0,0,6,0"></TextBlock>
-                                    <TextBlock FontSize="16" Text="{Binding}" VerticalAlignment="Center"></TextBlock>
-                                </StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="radio_button_checked" FontSize="12" VerticalAlignment="Top"
+                                               FontFamily="{StaticResource MaterialIcons}" Margin="0,6,6,0"></TextBlock>
+                                    <TextBlock Grid.Column="1" FontSize="16" Text="{Binding}" TextWrapping="Wrap" VerticalAlignment="Center"></TextBlock>
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                         <ItemsControl.ItemsSource>
                             <x:Array Type="{x:Type sys:String}">
-                                <sys:String>Bạn bị lỗi A</sys:String>
-                                    <sys:String>Bạn bị lỗi B</sys:String>
+                                <!--<sys:String>Bạn bị lỗi A</sys:String>
+                                    <sys:String>Bạn bị lỗi B sdaasd sa das da sd as das d as d a sd as das d sa d as d as dsa d as da sd as d sad as d asd sa d as d asd sa d as d sad as  d as d asd sa d as d s d as d s</sys:String>
                                     <sys:String>Bạn bị lỗi C</sys:String>
-                                    <sys:String>Bạn bị lỗi D</sys:String>
+                                    <sys:String>Bạn bị lỗi D</sys:String>-->
                             </x:Array>
                         </ItemsControl.ItemsSource>
                     </ItemsControl>
                 </StackPanel>
             </Border>
+            <StackPanel Margin="60,35,60,0" x:Name="APKLoadingBar" Visibility="Collapsed">
+                <TextBlock Margin="0,0,0,6">Installing APK....</TextBlock>
+                <ProgressBar IsIndeterminate="True" Style="{StaticResource ProgressBarBar_LoadingWithStripeLinesStyle}">
+                </ProgressBar>
+            </StackPanel>
+            <StackPanel Margin="60,35,60,0" x:Name="InstallAPK_Successfully" Orientation="Horizontal" HorizontalAlignment="Center" 
+                        TextBlock.Foreground="{StaticResource Green_Foreground}" Visibility="Collapsed">
+                <TextBlock Margin="0,0,0,6" FontFamily="{StaticResource MaterialIcons}" Text="task_alt" FontSize="20"></TextBlock>
+                <TextBlock Margin="9,0,0,6" >Installed APK Successfully</TextBlock>
+            </StackPanel>
             <Button Margin="0,20,0,0" DockPanel.Dock="Right" Click="InstallApkFile"
                         Style="{StaticResource JellyButtonStyle}"
                         Background="{StaticResource Blue}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200">

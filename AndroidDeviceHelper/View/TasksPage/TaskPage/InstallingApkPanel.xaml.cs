@@ -52,6 +52,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
         {
             var apkPath = ApkPathInput.Text.Trim();
             if (string.IsNullOrEmpty(apkPath)) return;
+            var isSuccess = false;
             _errors.Clear();
             var deviceProfile = DeviceProfile;
             var adbPath = AppSettings.Current.AdbPath;
@@ -67,9 +68,13 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
                 return;
             }
 
+            var btn = e.Source as Button;
+            btn.IsEnabled = false;
+            APKLoadingBar.Visibility = Visibility.Visible;
+
             Process p = new Process();
             ProcessStartInfo info = new ProcessStartInfo();
-            info.FileName = "cmd.exe";
+            info.FileName = "powershell.exe";
             info.RedirectStandardInput = true;
             info.UseShellExecute = false;
             info.RedirectStandardOutput = true;
@@ -80,35 +85,106 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
 
             p.StartInfo = info;
             p.Start();
-            p.OutputDataReceived += (sender, e) => { Console.WriteLine(e.Data); };
-            p.ErrorDataReceived += (sender, e) => { Console.WriteLine(e.Data); };
+            List<string> errors = new List<string>();
+            p.OutputDataReceived += (sender, e) => { 
+                string data = e.Data;
+                if(data != null )
+                {
+                    Console.WriteLine(data);
+                    if (data.Contains("(10061)"))
+                    {
+                        var lastline = data.Substring(e.Data.LastIndexOf("\n") + 1);
+                        lock (errors)
+                        {
+                            errors.Add($"{lastline}\nPlease check your device whether it is active, check the connection, or check the IP Address of device profile at settings tab.");
+                        }
+                    }
+                    else if (data.Contains("Success"))
+                    {
+                        isSuccess = true;
+                    }
+                }
+                
+            };
+            p.ErrorDataReceived += (sender, e) => {
+                string data = e.Data;
+                if (data != null)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(e.Data);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    if (data.Contains("INSTALL_PARSE_FAILED_NOT_APK"))
+                    {
+                        lock (errors)
+                        {
+                            errors.Add($"Failed to parse apk file. This file is invalid apk format.");
+                        }
+                    }
+                }
+                
+            };
             p.BeginOutputReadLine();
             p.BeginErrorReadLine();
 
             if (deviceProfile.Type != "wifi") { throw new Exception("Not support other connection type except 'wifi'."); }
-            using (StreamWriter sw = new StreamWriter(p.StandardInput.BaseStream, Encoding.UTF8))
+            using (StreamWriter sw = p.StandardInput)
             {
                 if (sw.BaseStream.CanWrite)
                 {
-                    sw.WriteLine();
+                    //sw.WriteLine();
                     Console.WriteLine($"cd \"{adbPath}\"");
                     sw.WriteLine($"cd \"{adbPath}\"");
 
-                    Console.WriteLine($"adb.exe connect {deviceProfile.Address}"); 
-                    sw.WriteLine($"adb.exe connect {deviceProfile.Address}");
+                    Console.WriteLine($"./adb.exe connect {deviceProfile.Address}"); 
+                    sw.WriteLine($"./adb.exe connect {deviceProfile.Address}");
 
-                    Console.WriteLine($"adb.exe install \"{apkPath}\"");
-                    sw.WriteLine($"adb.exe install \"{apkPath}\"");
+                    Console.WriteLine($"./adb.exe install \"{apkPath}\"");
+                    sw.WriteLine($"./adb.exe install \"{apkPath}\"");
 
 
                 }
                 else
                 {
-                    _errors.Add("File input is not .apk file.");
+                    _errors.Add("Shell input stream cannot be written.");
                     return;
                 }
             }
-            p.WaitForExit();
+
+            p.WaitForExitAsync().ContinueWith(t=> {
+                btn.Dispatcher.Invoke(new Action(() =>
+                {
+                    btn.IsEnabled = true;
+                }));
+                APKLoadingBar.Dispatcher.Invoke(new Action(() =>
+                {
+                    APKLoadingBar.Visibility = Visibility.Collapsed;
+                }));
+                p.Dispose();
+                lock (errors)
+                {
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        errors.ForEach(errors => _errors.Add(errors));
+                    }));
+                    
+                }
+                if (isSuccess)
+                {
+                    InstallAPK_Successfully.Dispatcher.Invoke(new Action(() =>
+                    {
+                        InstallAPK_Successfully.Visibility = Visibility.Visible;
+                    }));
+                }
+                else if(errors.Count == 0)
+                {
+                    this.Dispatcher.Invoke(new Action(() =>
+                    {
+                        _errors.Add("Unknown Error(s) occur.");
+                    }));
+                }
+            });
+
+            
         }
     }
 }

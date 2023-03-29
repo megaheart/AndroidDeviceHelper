@@ -22,6 +22,7 @@ namespace AndroidDeviceHelper
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             Console.OutputEncoding = Encoding.UTF8;
+            Console.InputEncoding = Encoding.UTF8;
             try
             {
                 using (var fileStream = File.OpenRead("settings.json"))

@@ -32,6 +32,7 @@
     <SolidColorBrush x:Key="Color_Popup_Background" Color="#FF323232"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_Options_Foreground" Color="#FFD1D1D1"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_CalendarButton_InActive" Color="#a6a6a6"></SolidColorBrush>
+    <SolidColorBrush x:Key="Color_ProgressBar_Background" Color="#FF444444"></SolidColorBrush>
 
     <DropShadowEffect x:Key="Layer_TitleBar" Color="Black" ShadowDepth="1" Direction="270" BlurRadius="4"></DropShadowEffect>
     <DropShadowEffect x:Key="Layer_NavBarLeft" Color="Black" ShadowDepth="1" Direction="0" BlurRadius="4" Opacity="0.7"></DropShadowEffect>
