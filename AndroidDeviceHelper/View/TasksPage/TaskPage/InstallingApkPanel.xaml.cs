@@ -174,6 +174,13 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
                     {
                         InstallAPK_Successfully.Visibility = Visibility.Visible;
                     }));
+                    Task.Delay(4000).ContinueWith(t =>
+                    {
+                        InstallAPK_Successfully.Dispatcher.Invoke(new Action(() =>
+                        {
+                            InstallAPK_Successfully.Visibility = Visibility.Collapsed;
+                        }));
+                    }).Wait();
                 }
                 else if(errors.Count == 0)
                 {
