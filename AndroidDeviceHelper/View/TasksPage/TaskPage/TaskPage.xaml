@@ -127,14 +127,14 @@
                 </TabItem.Header>
                 <local:InstallingApkPanel DeviceProfile="{Binding ElementName=ConnectionOptions_Combobox, Path=SelectedItem, Mode=OneWay}"></local:InstallingApkPanel>
             </TabItem>
-            <TabItem>
+            <TabItem IsSelected="True">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="..\..\..\Resources\App Icons\MainWindow\send-file.png" Height="20" Width="20" Margin="12,8,8,8"></Image>
                         <TextBlock VerticalAlignment="Center" Text="File Transfer"></TextBlock>
                     </StackPanel>
                 </TabItem.Header>
-                <local:TransferingFilesPanel></local:TransferingFilesPanel>
+                <local:TransferingFilesPanel DeviceProfile="{Binding ElementName=ConnectionOptions_Combobox, Path=SelectedItem, Mode=OneWay}"></local:TransferingFilesPanel>
             </TabItem>
         </TabControl>
     </StackPanel>

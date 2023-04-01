@@ -1,0 +1,9 @@
+<Configuration>
+	<Networking>Disable</Networking>
+	<MappedFolders>
+  		<MappedFolder> 
+    			<HostFolder>./bin/Debug/net7.0-windows</HostFolder> 
+    			<ReadOnly>true</ReadOnly> 
+  		</MappedFolder>
+	</MappedFolders>
+</Configuration>

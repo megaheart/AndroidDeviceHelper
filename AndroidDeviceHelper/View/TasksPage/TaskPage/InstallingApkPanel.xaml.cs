@@ -2,20 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AndroidDeviceHelper.View.TasksPage.TaskPage
 {
@@ -25,10 +16,12 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
     public partial class InstallingApkPanel : UserControl, IDeviceProfileDependency
     {
         private ObservableCollection<string> _errors = new ObservableCollection<string>();
+        PowershellIO powershellIO = null;
         public InstallingApkPanel()
         {
             InitializeComponent();
             ErrorMsgViewer.ItemsSource = _errors;
+            powershellIO = new PowershellIO();
         }
         public static readonly DependencyProperty DeviceProfileProperty = DependencyProperty.Register("DeviceProfile", typeof(DeviceProfile), typeof(InstallingApkPanel), new UIPropertyMetadata(null));
         public DeviceProfile DeviceProfile
@@ -52,105 +45,82 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
         {
             var apkPath = ApkPathInput.Text.Trim();
             if (string.IsNullOrEmpty(apkPath)) return;
+
+
             var isSuccess = false;
             _errors.Clear();
             var deviceProfile = DeviceProfile;
             var adbPath = AppSettings.Current.AdbPath;
             var dotPos = apkPath.LastIndexOf(".");
-            if(dotPos == -1 || apkPath.Substring(dotPos + 1) != "apk")
+            if (dotPos == -1 || apkPath.Substring(dotPos + 1) != "apk")
             {
                 _errors.Add("File input is not .apk file.");
                 return;
             }
-            if(!File.Exists(apkPath))
+            if (!File.Exists(apkPath))
             {
                 _errors.Add("APK File path doesn't exist.");
                 return;
             }
+            if (deviceProfile.Type != "wifi") { throw new Exception("Not support other connection type except 'wifi'."); }
 
             var btn = e.Source as Button;
             btn.IsEnabled = false;
             APKLoadingBar.Visibility = Visibility.Visible;
 
-            Process p = new Process();
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.FileName = "powershell.exe";
-            info.RedirectStandardInput = true;
-            info.UseShellExecute = false;
-            info.RedirectStandardOutput = true;
-            info.RedirectStandardError = true;
-            info.StandardErrorEncoding = Encoding.UTF8;
-            info.StandardInputEncoding = Encoding.UTF8;
-            info.StandardOutputEncoding = Encoding.UTF8;
-
-            p.StartInfo = info;
-            p.Start();
             List<string> errors = new List<string>();
-            p.OutputDataReceived += (sender, e) => { 
-                string data = e.Data;
-                if(data != null )
-                {
-                    Console.WriteLine(data);
-                    if (data.Contains("(10061)"))
-                    {
-                        var lastline = data.Substring(e.Data.LastIndexOf("\n") + 1);
-                        lock (errors)
-                        {
-                            errors.Add($"{lastline}\nPlease check your device whether it is active, check the connection, or check the IP Address of device profile at settings tab.");
-                        }
-                    }
-                    else if (data.Contains("Success"))
-                    {
-                        isSuccess = true;
-                    }
-                }
-                
-            };
-            p.ErrorDataReceived += (sender, e) => {
-                string data = e.Data;
-                if (data != null)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(e.Data);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    if (data.Contains("INSTALL_PARSE_FAILED_NOT_APK"))
-                    {
-                        lock (errors)
-                        {
-                            errors.Add($"Failed to parse apk file. This file is invalid apk format.");
-                        }
-                    }
-                }
-                
-            };
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
 
-            if (deviceProfile.Type != "wifi") { throw new Exception("Not support other connection type except 'wifi'."); }
-            using (StreamWriter sw = p.StandardInput)
+
+            powershellIO.Reset();
+            powershellIO.AddCommand($"cd \"{adbPath}\"", e =>
             {
-                if (sw.BaseStream.CanWrite)
+                e.PrintToConsole();
+                if (e.Error.Length > 0 && e.Error.First().Contains("Cannot find path"))
                 {
-                    //sw.WriteLine();
-                    Console.WriteLine($"cd \"{adbPath}\"");
-                    sw.WriteLine($"cd \"{adbPath}\"");
-
-                    Console.WriteLine($"./adb.exe connect {deviceProfile.Address}"); 
-                    sw.WriteLine($"./adb.exe connect {deviceProfile.Address}");
-
-                    Console.WriteLine($"./adb.exe install \"{apkPath}\"");
-                    sw.WriteLine($"./adb.exe install \"{apkPath}\"");
-
-
+                    lock (errors)
+                    {
+                        errors.Add($"ADB Path \"{adbPath}\" is not exist in storage. Please go to setting panel and change ADB Path.");
+                    }
                 }
-                else
+            });
+            powershellIO.AddCommand($"./adb.exe connect {deviceProfile.Address}", e =>
+            {
+                e.PrintToConsole();
+                if (e.Output.Length == 0) return;
+                var lastline = e.Output.Last();
+                if (e.Error.Length > 0 && e.Error.First().Contains("The term './adb.exe' is not recognized"))
                 {
-                    _errors.Add("Shell input stream cannot be written.");
-                    return;
+                    lock (errors)
+                    {
+                        errors.Add($"ADB Path \"{adbPath}\" doesn't contain \"adb.exe\". Please go to setting panel and change ADB Path.");
+                    }
                 }
-            }
+                else if (lastline.Contains("(10061)"))
+                {
+                    lock (errors)
+                    {
+                        errors.Add($"{lastline}\nPlease check your device whether it is active, check the connection, or check the IP Address of device profile at settings tab.");
+                    }
+                }
 
-            p.WaitForExitAsync().ContinueWith(t=> {
+            });
+            powershellIO.AddCommand($"./adb.exe install \"{apkPath}\"", e =>
+            {
+                e.PrintToConsole();
+                if (e.Error.Length > 0 && e.Error.Last().Contains("INSTALL_PARSE_FAILED_NOT_APK"))
+                {
+                    lock (errors)
+                    {
+                        errors.Add($"Failed to parse apk file. This file is invalid apk format.");
+                    }
+                }
+                if (e.Output.Last().Contains("Success"))
+                {
+                    isSuccess = true;
+                }
+            });
+            powershellIO.ExecuteAsync().ContinueWith(t =>
+            {
                 btn.Dispatcher.Invoke(new Action(() =>
                 {
                     btn.IsEnabled = true;
@@ -159,14 +129,13 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
                 {
                     APKLoadingBar.Visibility = Visibility.Collapsed;
                 }));
-                p.Dispose();
                 lock (errors)
                 {
                     this.Dispatcher.Invoke(new Action(() =>
                     {
                         errors.ForEach(errors => _errors.Add(errors));
                     }));
-                    
+
                 }
                 if (isSuccess)
                 {
@@ -182,7 +151,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
                         }));
                     }).Wait();
                 }
-                else if(errors.Count == 0)
+                else if (errors.Count == 0)
                 {
                     this.Dispatcher.Invoke(new Action(() =>
                     {
@@ -191,7 +160,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
                 }
             });
 
-            
+
         }
     }
 }

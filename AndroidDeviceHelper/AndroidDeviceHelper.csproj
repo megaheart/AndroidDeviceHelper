@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>android.ico</ApplicationIcon>
+	<!--<PublishAot>true</PublishAot>
+	  <_SuppressWpfTrimError>true</_SuppressWpfTrimError>-->
   </PropertyGroup>
 
   <ItemGroup>

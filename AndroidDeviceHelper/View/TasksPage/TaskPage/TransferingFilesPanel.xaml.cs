@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AndroidDeviceHelper.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +22,16 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
     /// </summary>
     public partial class TransferingFilesPanel : UserControl
     {
+        private ObservableCollection<string> _errors = new ObservableCollection<string>();
         public TransferingFilesPanel()
         {
             InitializeComponent();
+        }
+        public static readonly DependencyProperty DeviceProfileProperty = DependencyProperty.Register("DeviceProfile", typeof(DeviceProfile), typeof(TransferingFilesPanel), new UIPropertyMetadata(null));
+        public DeviceProfile DeviceProfile
+        {
+            set => SetValue(DeviceProfileProperty, value);
+            get => (DeviceProfile)GetValue(DeviceProfileProperty);
         }
     }
 }
