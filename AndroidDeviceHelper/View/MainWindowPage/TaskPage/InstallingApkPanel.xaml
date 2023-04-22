@@ -17,7 +17,7 @@
                                Text="adb" FontSize="20" VerticalAlignment="Center"></TextBlock>
                     <TextBlock Text="APK File:" FontSize="16" FontWeight="DemiBold" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
-                <Button Margin="0,0,0,0" DockPanel.Dock="Right" Click="BrowseApkFile"
+                <Button x:Name="BrowseApkBtn" Margin="0,0,0,0" DockPanel.Dock="Right" Click="BrowseApkFile"
                         Style="{StaticResource JellyButtonStyle}" Foreground="#000" 
                         Background="#FFFFFF" VerticalAlignment="Center">
                     <StackPanel Orientation="Horizontal">
@@ -72,7 +72,7 @@
                 <TextBlock Margin="0,0,0,6" FontFamily="{StaticResource MaterialIcons}" Text="task_alt" FontSize="20"></TextBlock>
                 <TextBlock Margin="9,0,0,6" >Installed APK Successfully</TextBlock>
             </StackPanel>
-            <Button Margin="0,20,0,0" DockPanel.Dock="Right" Click="InstallApkFile"
+            <Button Margin="0,20,0,0" DockPanel.Dock="Right" Click="StartInstallingApkFile"
                         Style="{StaticResource JellyButtonStyle}"
                         Background="{StaticResource Blue}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200">
                 <StackPanel Orientation="Horizontal">

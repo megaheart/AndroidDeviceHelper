@@ -42,6 +42,9 @@ namespace AndroidDeviceHelper
             }
             catch (Exception _) { }
             MainWindow.Show();
+
+
+            
         }
     }
 }

@@ -8,6 +8,7 @@ namespace AndroidDeviceHelper.View
 {
     interface IWindowPage
     {
-        void ResetPage();
+        void PageOpened();
+        void PageClosed();
     }
 }

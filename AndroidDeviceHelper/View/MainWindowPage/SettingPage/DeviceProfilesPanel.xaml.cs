@@ -3,19 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AndroidDeviceHelper.View.TasksPage.SettingPage
 {
@@ -58,16 +49,22 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
         bool switchingProfile = false;
         private void Input_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(switchingProfile) { return; }
+            if (switchingProfile) { return; }
             IsEdited = true;
         }
         public IList<DeviceProfile> DeviceProfiles
         {
-            get => _profiles.Select(p => new DeviceProfile() { Name = p.Name, Type = p.Type, Address = p.Address}).ToList();
+            get => _profiles.Select(p => new DeviceProfile() { Name = p.Name, Type = p.Type, Address = p.Address }).ToList();
             set
             {
                 _profiles = null;
-                _profiles = new ObservableCollection<DeviceProfile>(value);
+                _profiles = new ObservableCollection<DeviceProfile>(value.Select(
+                    p => new DeviceProfile()
+                    {
+                        Name = p.Name,
+                        Type = p.Type,
+                        Address = p.Address
+                    }));
                 ProfileOptionsPanel.ItemsSource = _profiles;
                 IsEdited = false;
             }
@@ -95,7 +92,7 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
 
             ProfileEditingPanel.Visibility = Visibility.Visible;
             BindingOperations.ClearBinding(ProfileNameInput, TextBox.TextProperty);
-            
+
             if (_curDevice != null)
             {
                 RemoveProfileTypeInput(_curDevice.Type);
@@ -173,7 +170,7 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
             var grid = VisualTreeHelper.GetParent(radioBtn) as Grid;
             var listBoxItem = VisualTreeHelper.GetParent(grid) as ListBoxItem;
             listBoxItem.IsSelected = true;
-            
+
         }
     }
 }

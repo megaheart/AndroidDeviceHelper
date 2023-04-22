@@ -3,7 +3,10 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -22,13 +25,6 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
         {
             InitializeComponent();
             ErrorMsgViewer.ItemsSource = _errors;
-        }
-        public void ResetPage()
-        {
-            DeviceProfilesViewer.DeviceProfiles = AppSettings.Current.DeviceProfiles;
-            AdbPathInput.Text = AppSettings.Current.AdbPath;
-            BackgroundPathInput.Text = "";
-            _errors.Clear();
         }
         private void BrowseBackgroundPicturePath(object sender, RoutedEventArgs e)
         {
@@ -51,7 +47,10 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
                 AdbPathInput.Text = dialog.SelectedPath;
             }
         }
-        private void SaveSettings(object sender, RoutedEventArgs e)
+
+        public static readonly Regex DeviceWifiAddressRegex = new Regex("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}(:[0-9]{1,5})*$");
+
+        private async void SaveSettings(object sender, RoutedEventArgs e)
         {
             bool isEdited = false;
             _errors.Clear();
@@ -98,7 +97,7 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
                     DirectoryInfo directory = new DirectoryInfo(adbPath);
                     if (!directory.EnumerateFiles().Any(f => f.Name == "adb.exe"))
                     {
-                        _errors.Add("Adb Path doesn't exist.");
+                        _errors.Add("Adb Path doesn't contain \"adb.exe\".");
                     }
                     else
                     {
@@ -107,33 +106,81 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
                     }
                 }
             }
-            
+            bool deviceProfileOccursError = false;
             if(DeviceProfilesViewer.IsEdited)
             {
                 var deviceProfiles = DeviceProfilesViewer.DeviceProfiles;
-                //Check Profile Name Distinct
-                bool isProfileNameDistinct = false;
+                StringBuilder stringBuilder = new StringBuilder();
+                //Check requirement field
                 for (int i = 0; i < deviceProfiles.Count; i++)
                 {
-                    for (int j = i + 1; j < deviceProfiles.Count; j++)
+                    stringBuilder.Clear();
+                    if (string.IsNullOrWhiteSpace(deviceProfiles[i].Name))
                     {
-                        if (deviceProfiles[i].Name == deviceProfiles[j].Name)
+                        stringBuilder.Append("Name (not empty)");
+                    }
+                    if (deviceProfiles[i].Type == "wifi")
+                    {
+                        if (string.IsNullOrWhiteSpace(deviceProfiles[i].Address))
                         {
-                            isProfileNameDistinct = true;
-                            _errors.Add($"Device Profiles '{deviceProfiles[i].Name}' are duplicated.");
+                            if(stringBuilder.Length != 0) { stringBuilder.Append(", "); }
+                            stringBuilder.Append("Address (not empty, format: 'HOST[:PORT]' ex '1.1.1.1[:5050]')");
                         }
+                        else if(!DeviceWifiAddressRegex.IsMatch(deviceProfiles[i].Address))
+                        {
+                            if (stringBuilder.Length != 0) { stringBuilder.Append(", "); }
+                            stringBuilder.Append("Address (correct format: 'HOST[:PORT]' ex '1.1.1.1[:5050]'))");
+                        }
+                    }
+                    if (stringBuilder.Length != 0)
+                    {
+                        _errors.Add($"Device Profiles {i + 1}th (Name: '{deviceProfiles[i].Name}') requires {stringBuilder}.");
+                        deviceProfileOccursError = true;
                     }
                 }
 
-                if (!isProfileNameDistinct)
+                if (!deviceProfileOccursError)
                 {
-                    AppSettings.Current.DeviceProfiles.Clear();
-                    foreach (var profile in deviceProfiles)
+                    //Check Profile Name Distinct
+                    bool isProfileNameAndHashDistinct = false;
+
+                    var hashList = deviceProfiles.Select(d => d.DeviceConnectionHash).ToArray();
+
+                    for (int i = 0; i < deviceProfiles.Count; i++)
                     {
-                        AppSettings.Current.DeviceProfiles.Add(profile);
+                        for (int j = i + 1; j < deviceProfiles.Count; j++)
+                        {
+                            if (deviceProfiles[i].Name == deviceProfiles[j].Name)
+                            {
+                                isProfileNameAndHashDistinct = true;
+                                _errors.Add($"Device Profiles {i + 1}th and {j + 1}th mustn't have same name '{deviceProfiles[i].Name}'.");
+                            }
+
+                            if (hashList[i] == hashList[j])
+                            {
+                                isProfileNameAndHashDistinct = true;
+                                _errors.Add($"Device Profiles {i + 1}th ('{deviceProfiles[i].Name}') and {j + 1}th ('{deviceProfiles[j].Name}') mustn't connect with the same device.");
+                            }
+                        }
                     }
-                    isEdited = true;
+                    if (!isProfileNameAndHashDistinct)
+                    {
+                        AppSettings.Current.DeviceProfiles.Clear();
+                        foreach (var profile in deviceProfiles)
+                        {
+                            AppSettings.Current.DeviceProfiles.Add(profile);
+                        }
+                        isEdited = true;
+                    }
+                    else
+                    {
+                        deviceProfileOccursError = true;
+                    }
+
                 }
+
+                
+
             }
 
             //Save Settings File
@@ -141,10 +188,27 @@ namespace AndroidDeviceHelper.View.TasksPage.SettingPage
             {
                 using (var fileStream = File.Open("settings.json", FileMode.Create))
                 {
-                    JsonSerializer.SerializeAsync<AppSettings>(fileStream, AppSettings.Current).ConfigureAwait(false);
+                    await JsonSerializer.SerializeAsync<AppSettings>(fileStream, AppSettings.Current).ConfigureAwait(false);
                 }
+                if(!deviceProfileOccursError)
+                    DeviceProfilesViewer.IsEdited = false;
+                SaveNoti.Visibility = Visibility.Visible;
+                await Task.Delay(5000);
+                SaveNoti.Visibility = Visibility.Hidden;
             }
 
+        }
+
+        public void PageOpened()
+        {
+            DeviceProfilesViewer.DeviceProfiles = AppSettings.Current.DeviceProfiles;
+            AdbPathInput.Text = AppSettings.Current.AdbPath;
+            BackgroundPathInput.Text = "";
+            _errors.Clear();
+        }
+
+        public void PageClosed()
+        {
         }
     }
 }

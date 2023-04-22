@@ -8,8 +8,8 @@ using System.Windows;
 
 namespace AndroidDeviceHelper.View.TasksPage.TaskPage
 {
-    public interface IDeviceProfileDependency
+    public interface IConnectionStateDependency
     {
-        DeviceProfile DeviceProfile { set; }
+        ConnectionState ConnectionState { set; }
     }
 }

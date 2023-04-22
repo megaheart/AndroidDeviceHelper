@@ -1,0 +1,171 @@
+﻿<UserControl x:Class="AndroidDeviceHelper.View.TasksPage.TaskPage.TransferingFiles.FileViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AndroidDeviceHelper.View.TasksPage.TaskPage.TransferingFiles"
+             mc:Ignorable="d" Foreground="{StaticResource Color_Foreground}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="{x:Type ScrollViewer}" TargetType="ScrollViewer" BasedOn="{StaticResource ScrollViewer_AutoToggleStyle}"></Style>
+    </UserControl.Resources>
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Padding="0,3" Margin="0,6,0,3"
+                Background="{StaticResource Color_Sheet_Toolbar}" CornerRadius="3">
+            <Grid TextBlock.FontStyle="Italic">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="130"></ColumnDefinition>
+                    <ColumnDefinition Width="80"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1">File name</TextBlock>
+                <TextBlock Grid.Column="2" Margin="5,0,0,0" TextAlignment="Right">Time</TextBlock>
+                <TextBlock Grid.Column="3" Margin="5,0,0,0" TextAlignment="Right">Size</TextBlock>
+            </Grid>
+        </Border>
+        <ListView x:Name="FileListViewer" MouseDoubleClick="FileListViewer_MouseDoubleClick">
+            <ListView.Template>
+                <ControlTemplate TargetType="ListView">
+                    <!--<WrapPanel IsItemsHost="True"></WrapPanel>-->
+                    <ScrollViewer>
+                        <VirtualizingStackPanel IsItemsHost="True"></VirtualizingStackPanel>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ListView.Template>
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:FileModel}">
+                    <Grid DockPanel.Dock="Top" TextBlock.Foreground="{StaticResource Color_Foreground}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="130"></ColumnDefinition>
+                            <ColumnDefinition Width="80"></ColumnDefinition>
+                            <ColumnDefinition Width="30"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="icon" Source="../../../../Resources/App Icons/FileIcons/file.png" 
+                               Height="20" Width="20" HorizontalAlignment="Center"></Image>
+                        <TextBlock Grid.Column="1" Text="{Binding FileName}" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock Grid.Column="2" Text="{Binding Time, StringFormat=HH:mm dd-MM-yyyy}" 
+                                   Margin="5,0,0,0" TextAlignment="Right" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock Grid.Column="3" Text="{Binding FileSize}" TextAlignment="Right" 
+                                   Margin="5,0,0,0" VerticalAlignment="Center"></TextBlock>
+                    </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding FileType}" Value="/">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/folder-invoices.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileType}" Value="@">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/shortcut.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="png">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/image-file.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="jpg">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/image-file.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="jpeg">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/image-file.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="bmp">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/image-file.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="docx">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/docs.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="doc">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/docs.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="xlsx">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/google-sheets.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="xls">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/google-sheets.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="pptx">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/google-slides.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="ppt">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/google-slides.png"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding FileExtension}" Value="pdf">
+                            <Setter TargetName="icon" Property="Source" 
+                                    Value="../../../../Resources/App Icons/FileIcons/pdf-2.png"></Setter>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsSource>
+                <x:Array Type="{x:Type local:FileModel}">
+                    <local:FileModel FileName="Dir Hello" FileType="/" FileExtension="" FileSize="0KB"></local:FileModel>
+                    <local:FileModel FileName="Dir xxx" FileType="/" FileExtension="" FileSize="0KB"></local:FileModel>
+                    <local:FileModel FileName="Dir ZZZ" FileType="/" FileExtension="" FileSize="0KB"></local:FileModel>
+                    <local:FileModel FileName="Dir shortcut 1" FileType="@" FileExtension="" FileSize="0KB"></local:FileModel>
+                    <local:FileModel FileName="Dir shortcut 2" FileType="@" FileExtension="" FileSize="0KB"></local:FileModel>
+                    <local:FileModel FileName="Hello.png" FileType="*" FileExtension="png" FileSize="100KB"></local:FileModel>
+                    <local:FileModel FileName="Hello 1.bmp" FileType="*" FileExtension="bmp" FileSize="150KB"></local:FileModel>
+                    <local:FileModel FileName="Hello 2 34.jpg" FileType="*" FileExtension="jpg" FileSize="120KB"></local:FileModel>
+                    <local:FileModel FileName="Hello 2 3 4.jpeg" FileType="*" FileExtension="jpeg" FileSize="300KB"></local:FileModel>
+                    <local:FileModel FileName="Document.docx" FileType="*" FileExtension="docx" FileSize="120KB"></local:FileModel>
+                    <local:FileModel FileName="Calculation.xlsx" FileType="*" FileExtension="xlsx" FileSize="160KB"></local:FileModel>
+                    <local:FileModel FileName="Slide.pptx" FileType="*" FileExtension="pptx" FileSize="180KB"></local:FileModel>
+                    <local:FileModel FileName="Document.doc" FileType="*" FileExtension="doc" FileSize="120KB"></local:FileModel>
+                    <local:FileModel FileName="Calculation.xls" FileType="*" FileExtension="xls" FileSize="160KB"></local:FileModel>
+                    <local:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></local:FileModel>
+                    <local:FileModel FileName="Document PDF.pdf" FileType="*" FileExtension="pdf" FileSize="690KB"></local:FileModel>
+                    <local:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></local:FileModel>
+                    <local:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></local:FileModel>
+                    <local:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></local:FileModel>
+                    <local:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></local:FileModel>
+                    <local:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></local:FileModel>
+                    <local:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></local:FileModel>
+                    <local:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></local:FileModel>
+                    <local:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></local:FileModel>
+                    <local:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></local:FileModel>
+                </x:Array>
+            </ListView.ItemsSource>
+            <ListView.Resources>
+                <Style x:Key="{x:Type ListViewItem}" TargetType="ListViewItem">
+                    <Setter Property="SnapsToDevicePixels" Value="true" />
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+                    <Setter Property="Padding" Value="0,3"></Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Grid>
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="3"></Border>
+                                    <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                                      HorizontalAlignment="Stretch"/>
+                                </Grid>
+                               
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource Color_Button_Hover_Background}"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource Color_Button_Selected_Background}"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Resources>
+        </ListView>
+    </DockPanel>
+</UserControl>

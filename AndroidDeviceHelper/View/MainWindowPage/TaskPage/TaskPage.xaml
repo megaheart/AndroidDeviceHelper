@@ -92,12 +92,14 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <StackPanel>
-        <Border CornerRadius="5" Background="{StaticResource Color_Sheet}" 
+    <DockPanel>
+        <Border DockPanel.Dock="Top" CornerRadius="5" Background="{StaticResource Color_Sheet}" 
                 Height="60" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,18">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <ComboBox x:Name="ConnectionOptions_Combobox" SelectedIndex="0" VerticalAlignment="Center" Margin="35,0,10,0"
-                          Style="{StaticResource ComboBoxWithoutTextBoxStyle}" Width="200" Height="36">
+            <DockPanel HorizontalAlignment="Left">
+                <ComboBox DockPanel.Dock="Left" x:Name="ConnectionOptions_Combobox" 
+                          SelectedIndex="0" VerticalAlignment="Center" Margin="35,0,10,0"
+                          Style="{StaticResource ComboBoxWithoutTextBoxStyle}" 
+                          Width="200" Height="36">
                     <ComboBox.ItemTemplate>
                         <DataTemplate DataType="{x:Type m:DeviceProfile}">
                             <StackPanel Orientation="Horizontal" TextBlock.Foreground="{DynamicResource Color_FloorButton_Foreground}" Margin="15,0,0,0">
@@ -111,13 +113,103 @@
                             </DataTemplate.Triggers>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                    <!--<m:DeviceProfile Type="wifi" Name="Network"/>
-                    <m:DeviceProfile Type="wifi" Name="Network 2"/>-->
-                    
+                    <ComboBox.ItemsSource>
+                        <x:Array Type="{x:Type m:DeviceProfile}">
+                            <m:DeviceProfile Type="wifi" Name="Network"/>
+                            <m:DeviceProfile Type="wifi" Name="Network 2"/>
+                        </x:Array>
+                    </ComboBox.ItemsSource>
                 </ComboBox>
-            </StackPanel>
+                <ContentControl x:Name="CurrentDeviceProfileViewer">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate DataType="{x:Type m:DeviceProfile}">
+                            <Border Width="200" Height="36" BorderThickness="1" Margin="35,0,10,0" CornerRadius="2"
+                                    BorderBrush="{DynamicResource Color_FloorButton_Disabled_Foreground}">
+                                <StackPanel Orientation="Horizontal" Margin="15,0,0,0"
+                                            TextBlock.Foreground="{DynamicResource Color_FloorButton_Foreground}" >
+                                    <TextBlock x:Name="_symbol" VerticalAlignment="Center" 
+                                                 Text="device_unknown" FontSize="18" 
+                                                FontFamily="{StaticResource MaterialIcons}"></TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" 
+                                                Margin="7,0,7,0" MaxWidth="110" FontSize="14"></TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Type}" Value="wifi">
+                                    <Setter TargetName="_symbol" Property="Text" Value="wifi"></Setter>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                    <m:DeviceProfile Type="wifi" Name="Network"/>
+                </ContentControl>
+                
+                
+                
+                <ToggleButton Margin="0,0,15,0" DockPanel.Dock="Left" Click="ConnectingBtn_Click"
+                         VerticalAlignment="Center" x:Name="ConnectingBtn" Width="120">
+                    <ToggleButton.Style>
+                        <Style TargetType="ToggleButton" BasedOn="{StaticResource JellyButtonStyle}">
+                            <Setter Property="Background" Value="{StaticResource Green}"></Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource Red}"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ToggleButton.Style>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="20" FontFamily="{StaticResource MaterialIcons}">
+                            <TextBlock.RenderTransform>
+                                <RotateTransform x:Name="ConnectingBtn_Icon_Tfm" CenterX="10" CenterY="10">
+                                </RotateTransform>
+                            </TextBlock.RenderTransform>
+                            <TextBlock.Style>
+                                <Style>
+                                    <Setter Property="TextBlock.Text" Value="link"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=ConnectingBtn, Path=IsChecked}" Value="True">
+                                            <Setter Property="TextBlock.Text" Value="link_off"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=ConnectingBtn, Path=IsEnabled}" Value="False">
+                                            <Setter Property="TextBlock.Text" Value="sync"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock VerticalAlignment="Center" Margin="7,0,7,0">
+                            <TextBlock.Style>
+                                <Style>
+                                    <Setter Property="TextBlock.Text" Value="Connect"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=ConnectingBtn, Path=IsChecked}" Value="True">
+                                            <Setter Property="TextBlock.Text" Value="Disconnect"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding ElementName=ConnectingBtn, Path=IsEnabled}" Value="False">
+                                            <Setter Property="TextBlock.Text" Value="Connecting"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                </ToggleButton>
+
+                <TextBlock x:Name="AlertIcon" FontSize="20" DockPanel.Dock="Left"
+                           FontFamily="{StaticResource MaterialIcons}" 
+                           Foreground="{StaticResource Yellow_Foreground}"
+                           VerticalAlignment="Center">
+                    info
+                </TextBlock>
+                <TextBlock x:Name="AlertMessage" Foreground="{StaticResource Yellow_Foreground}"
+                           VerticalAlignment="Center" Margin="5,0,0,0" TextWrapping="Wrap">
+                    Device is NOT connected. Please click &lt;Connect&gt; button
+                </TextBlock>
+
+            </DockPanel>
         </Border>
-        <TabControl Style="{StaticResource TabControlSeparationStyle}">
+        <TabControl x:Name="MainTasksPanel" Style="{StaticResource TabControlSeparationStyle}">
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -125,7 +217,7 @@
                         <TextBlock VerticalAlignment="Center" Text="Install Apk"></TextBlock>
                     </StackPanel>
                 </TabItem.Header>
-                <local:InstallingApkPanel DeviceProfile="{Binding ElementName=ConnectionOptions_Combobox, Path=SelectedItem, Mode=OneWay}"></local:InstallingApkPanel>
+                <local:InstallingApkPanel x:Name="_InstallingApkPanel"></local:InstallingApkPanel>
             </TabItem>
             <TabItem IsSelected="True">
                 <TabItem.Header>
@@ -134,8 +226,8 @@
                         <TextBlock VerticalAlignment="Center" Text="File Transfer"></TextBlock>
                     </StackPanel>
                 </TabItem.Header>
-                <local:TransferingFilesPanel DeviceProfile="{Binding ElementName=ConnectionOptions_Combobox, Path=SelectedItem, Mode=OneWay}"></local:TransferingFilesPanel>
+                <local:TransferingFilesPanel x:Name="_TransferingFilesPanel"></local:TransferingFilesPanel>
             </TabItem>
         </TabControl>
-    </StackPanel>
+    </DockPanel>
 </UserControl>

@@ -30,10 +30,13 @@
             <!--#region Colors-->
             <SolidColorBrush x:Key="Red" Color="#d64949"></SolidColorBrush>
             <SolidColorBrush x:Key="LightRed" Color="#d95959"></SolidColorBrush>
+            <SolidColorBrush x:Key="Red_Foreground" Color="#d95959"></SolidColorBrush>
             <SolidColorBrush x:Key="DarkRed" Color="#d02f2f"></SolidColorBrush>
+            <SolidColorBrush x:Key="Blue_Foreground" Color="#FF92caf4"></SolidColorBrush>
             <SolidColorBrush x:Key="Blue" Color="#3f7dd9"></SolidColorBrush>
             <SolidColorBrush x:Key="LightBlue" Color="#558bdd"></SolidColorBrush>
             <SolidColorBrush x:Key="DarkBlue" Color="#FF014874"></SolidColorBrush>
+            <SolidColorBrush x:Key="Yellow_Foreground" Color="#FFFFD849"></SolidColorBrush>
             <SolidColorBrush x:Key="Yellow" Color="#e8b600"></SolidColorBrush>
             <SolidColorBrush x:Key="LightYellow" Color="#ffc800"></SolidColorBrush>
             <SolidColorBrush x:Key="DarkYellow" Color="#cca000"></SolidColorBrush>
@@ -432,7 +435,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style TargetType="{x:Type Button}" x:Key="JellyButtonStyle">
+            <Style TargetType="{x:Type ButtonBase}" x:Key="JellyButtonStyle">
                 <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
                 <Setter Property="Cursor" Value="Hand"></Setter>
                 <Setter Property="Foreground" Value="White"></Setter>
@@ -1026,9 +1029,9 @@
                                 <Trigger Property="IsGrouping" Value="true">
                                     <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                                 </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
+                                <!--<Trigger Property="IsEnabled" Value="False">
                                     <Setter TargetName="ContentSite" Property="Content" Value="{x:Null}" />
-                                </Trigger>
+                                </Trigger>-->
 
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

@@ -18,33 +18,5 @@ namespace AndroidDeviceHelper.Models
         public string? AdbPath { get; set; } = null;
         public ObservableCollection<DeviceProfile> DeviceProfiles { get; set; } = new ObservableCollection<DeviceProfile>(); 
     }
-    public class DeviceProfile: NotifiableObject
-    {
-        private string _name = null;
-        public string Name { 
-            get => _name;
-            set
-            {
-                if (_name != value)
-                {
-                    _name = value;
-                    OnPropertyChanged(nameof(Name));
-                }
-            } 
-        }
-        private string _type;
-        public string Type
-        {
-            get => _type;
-            set
-            {
-                if (_type != value)
-                {
-                    _type = value;
-                    OnPropertyChanged(nameof(Name));
-                }
-            }
-        }
-        public string Address { get; set; } = null;
-    }
+    
 }

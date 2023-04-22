@@ -6,8 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>android.ico</ApplicationIcon>
-	<!--<PublishAot>true</PublishAot>
-	  <_SuppressWpfTrimError>true</_SuppressWpfTrimError>-->
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +14,15 @@
     <None Remove="Fonts\MaterialIconsOutlined-Regular.ttf" />
     <None Remove="Fonts\MaterialIconsRound-Regular.ttf" />
     <None Remove="Fonts\MaterialIconsTwoTone-Regular.ttf" />
+    <None Remove="Resources\App Icons\FileIcons\docs.png" />
+    <None Remove="Resources\App Icons\FileIcons\file.png" />
+    <None Remove="Resources\App Icons\FileIcons\folder-invoices.png" />
+    <None Remove="Resources\App Icons\FileIcons\google-sheets.png" />
+    <None Remove="Resources\App Icons\FileIcons\google-slides.png" />
+    <None Remove="Resources\App Icons\FileIcons\image-file.png" />
+    <None Remove="Resources\App Icons\FileIcons\pdf-2.png" />
+    <None Remove="Resources\App Icons\FileIcons\rtf-document.png" />
+    <None Remove="Resources\App Icons\FileIcons\shortcut.png" />
     <None Remove="Resources\App Icons\MainWindow\application-window.png" />
     <None Remove="Resources\App Icons\MainWindow\overtime.png" />
     <None Remove="Resources\App Icons\MainWindow\picture.png" />
@@ -35,10 +43,38 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AdvancedSharpAdbClient" Version="2.5.5" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\App Icons\FileIcons\docs.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\file.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\folder-invoices.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\google-sheets.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\google-slides.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\image-file.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\pdf-2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\rtf-document.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\FileIcons\shortcut.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\App Icons\MainWindow\application-window.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -84,6 +120,10 @@
     <Resource Include="Fonts\MaterialIconsTwoTone-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="View\PreviewWindowPage\" />
   </ItemGroup>
 
 </Project>

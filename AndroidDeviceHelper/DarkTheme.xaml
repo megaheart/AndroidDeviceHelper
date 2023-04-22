@@ -5,6 +5,9 @@
     <SolidColorBrush x:Key="Color_Button_Hover_Background" Color="#FF303030"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_Button_Press_Background" Color="#FF212121"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_Button_Selected_Background" Color="#FF404040"></SolidColorBrush>
+
+    <SolidColorBrush x:Key="Color_ButtonOnSheet_Background" Color="#FF424242"></SolidColorBrush>
+
     <SolidColorBrush x:Key="Color_Foreground_Dark" Color="#FFe6e6e6"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_Foreground_Dark2" Color="#FFCCCCCC"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_Text_Disabled" Color="#FF464646"></SolidColorBrush>
@@ -18,6 +21,7 @@
     <SolidColorBrush x:Key="Color_Foreground_Light" Color="#FFbfbfbf"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_Foreground_Light2" Color="#FF606060"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_Sheet" Color="#FF1E1E1E"></SolidColorBrush>
+    <SolidColorBrush x:Key="Color_Sheet_Toolbar" Color="#383838"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_ScrollBar_Background" Color="#FF2D2D30"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_ScrollBar_Foreground" Color="#FF5A5A5A"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_ScrollBar_Foreground_Hover" Color="#FF878787"></SolidColorBrush>

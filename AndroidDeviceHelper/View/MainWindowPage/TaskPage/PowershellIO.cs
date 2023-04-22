@@ -11,10 +11,10 @@ using System.Windows.Shapes;
 
 namespace AndroidDeviceHelper.View.TasksPage.TaskPage
 {
-    public delegate void PowershellOutputEventHandler(PowershellOutputEventArgs e);
-    public class PowershellOutputEventArgs
+    public delegate void ShellOutputEventHandler(ShellOutputEventArgs e);
+    public class ShellOutputEventArgs
     {
-        public PowershellOutputEventArgs(string[] output, string[] error, string currentDirectory, string command)
+        public ShellOutputEventArgs(string[] output, string[] error, string currentDirectory, string command)
         {
             Output = output;
             Error = error;
@@ -65,7 +65,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
         private ConcurrentQueue<bool> isErrorQueue;
         //private List<PowershellIOCommand> commands;
         private List<string> commands = new List<string>(4);
-        private List<PowershellOutputEventHandler?> handlers = new List<PowershellOutputEventHandler?>(4);
+        private List<ShellOutputEventHandler?> handlers = new List<ShellOutputEventHandler?>(4);
         public PowershellIO()
         {
             outputQueue = new ConcurrentQueue<string>();
@@ -91,7 +91,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
         /// <param name="handler">return current directory, output, error in event args, is handled after powershell process completed.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">throw if <paramref name="command"/> is null or empty or whitespace.</exception>
-        public PowershellIO AddCommand(string command, PowershellOutputEventHandler? handler)
+        public PowershellIO AddCommand(string command, ShellOutputEventHandler? handler)
         {
             if (string.IsNullOrEmpty(command) || string.IsNullOrWhiteSpace(command))
                 throw new ArgumentNullException(nameof(command), $"{nameof(command)} mustn't be null or empty or whitespace.");
@@ -113,7 +113,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
         }
         /// <summary>
         /// Create a powershell process and run all commands which have just been added. After powershell process completed, 
-        /// handle all <see cref="PowershellOutputEventHandler"/>
+        /// handle all <see cref="ShellOutputEventHandler"/>
         /// </summary>
         public async Task ExecuteAsync()
         {
@@ -141,7 +141,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
             p.Dispose();
         }
         /// <summary>
-        /// Clear all commands and <see cref="PowershellOutputEventHandler"/> which were added before
+        /// Clear all commands and <see cref="ShellOutputEventHandler"/> which were added before
         /// </summary>
         public void Reset()
         {
@@ -170,7 +170,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
             return line.Length > 2 && line[0] == 'P' && line[1] == 'S';
         }
         /// <summary>
-        /// Handle <see cref="PowershellOutputEventHandler"/> which have just been added
+        /// Handle <see cref="ShellOutputEventHandler"/> which have just been added
         /// </summary>
         private void _HandleOutput()
         {
@@ -192,7 +192,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
                 isErrorQueue.TryDequeue(out var isError);
                 if (isCommand(output, commands[i]))
                 {
-                    handlers[i - 1]?.Invoke(new PowershellOutputEventArgs(outputLines.ToArray(), errorLines.ToArray(), curDir, commands[i - 1]));
+                    handlers[i - 1]?.Invoke(new ShellOutputEventArgs(outputLines.ToArray(), errorLines.ToArray(), curDir, commands[i - 1]));
                     outputLines.Clear();
                     errorLines.Clear();
                     curDir = output.Substring(3, output.IndexOf('>') - 3);

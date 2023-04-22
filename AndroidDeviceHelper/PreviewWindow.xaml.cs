@@ -1,14 +1,9 @@
-﻿using AndroidDeviceHelper.Models;
-using AndroidDeviceHelper.Native;
-using AndroidDeviceHelper.View;
-using AndroidDeviceHelper.View.TasksPage.SettingPage;
-using AndroidDeviceHelper.View.TasksPage.TaskPage;
+﻿using AndroidDeviceHelper.Native;
+using AndroidDeviceHelper.View.TasksPage.TaskPage.TransferingFiles;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,42 +12,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace AndroidDeviceHelper
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for PreviewWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class PreviewWindow : Window
     {
-        public MainWindow()
+        public PreviewWindow()
         {
             InitializeComponent();
             WindowResizer = new WindowResizer(this);
-            
         }
-        private IWindowPage _mainPage = null;
-        private IWindowPage _taskPage = null;
-        private void MoveToTasksPage(object sender, RoutedEventArgs e)
+        public static bool Preview(FileModel file, IList<FileModel> DirFiles)
         {
-            _mainPage?.PageClosed();
-            if (_taskPage == null) _taskPage = new TaskPage();
-            _taskPage.PageOpened();
-            Main.Content = _taskPage;
-        }
-        private IWindowPage _settingPage = null;
-        private void MoveToSettingPage(object sender, RoutedEventArgs e)
-        {
-            _mainPage?.PageClosed();
-            if (_settingPage == null) _settingPage = new SettingPage();
-            _settingPage.PageOpened();
-            Main.Content = _settingPage;
-        }
-        private void MoveToBlankPage(object sender, RoutedEventArgs e)
-        {
-            Main.Content = null;
+            return false;
+            PreviewWindow previewWindow = new PreviewWindow();
+            previewWindow.Show();
+            return true;
         }
         #region Window resizer
         WindowResizer WindowResizer;
