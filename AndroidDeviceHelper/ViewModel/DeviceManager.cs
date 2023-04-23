@@ -1,6 +1,5 @@
 ﻿using AdvancedSharpAdbClient;
 using AndroidDeviceHelper.Models;
-using AndroidDeviceHelper.View.MainWindowPage.TaskPage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AndroidDeviceHelper.ViewModel
 {
-    
+
     public class DeviceManager
     {
         public static readonly DeviceManager Instance = new DeviceManager();

@@ -32,6 +32,10 @@
     <None Remove="Resources\App Icons\MainWindow\shortcuts.png" />
     <None Remove="Resources\App Icons\MainWindow\tab.png" />
     <None Remove="Resources\App Icons\MainWindow\tasks.png" />
+    <None Remove="Resources\App Icons\MessageBox\box-important.png" />
+    <None Remove="Resources\App Icons\MessageBox\cancel.png" />
+    <None Remove="Resources\App Icons\MessageBox\medium-risk.png" />
+    <None Remove="Resources\App Icons\MessageBox\speech-bubble.png" />
     <None Remove="Resources\default_background.jpg" />
   </ItemGroup>
 
@@ -118,6 +122,18 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Fonts\MaterialIconsTwoTone-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MessageBox\box-important.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MessageBox\cancel.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MessageBox\medium-risk.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\App Icons\MessageBox\speech-bubble.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

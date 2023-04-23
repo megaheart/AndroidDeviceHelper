@@ -1,8 +1,8 @@
 ﻿using AndroidDeviceHelper.Models;
 using AndroidDeviceHelper.Native;
 using AndroidDeviceHelper.View;
-using AndroidDeviceHelper.View.TasksPage.SettingPage;
-using AndroidDeviceHelper.View.TasksPage.TaskPage;
+using AndroidDeviceHelper.View.MainWindowPage.SettingPage;
+using AndroidDeviceHelper.View.MainWindowPage.TaskPage;
 using System;
 using System.Collections.Generic;
 using System.IO;

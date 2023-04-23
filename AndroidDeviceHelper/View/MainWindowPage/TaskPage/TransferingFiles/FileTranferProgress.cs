@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidDeviceHelper.View.TasksPage.TaskPage.TransferingFiles
+namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
 {
     public class FileTranferProgress: NotifiableObject
     {

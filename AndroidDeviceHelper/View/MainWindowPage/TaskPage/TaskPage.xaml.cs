@@ -23,7 +23,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AndroidDeviceHelper.View.TasksPage.TaskPage
+namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
 {
     /// <summary>
     /// Interaction logic for TaskPage.xaml

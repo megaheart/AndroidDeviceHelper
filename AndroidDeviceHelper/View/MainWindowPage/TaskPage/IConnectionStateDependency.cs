@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace AndroidDeviceHelper.View.TasksPage.TaskPage
+namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
 {
     public interface IConnectionStateDependency
     {

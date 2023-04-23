@@ -327,6 +327,7 @@
                 <Setter Property="FontSize" Value="14"></Setter>
                 <Setter Property="Foreground" Value="{DynamicResource Color_Foreground}"></Setter>
                 <Setter Property="CaretBrush" Value="{DynamicResource Color_Foreground}"></Setter>
+                <Setter Property="Background" Value="{DynamicResource Color_TextBox_Background}"></Setter>
                 <Setter Property="Effect" Value="{DynamicResource Layer_TextBox}"></Setter>
                 <Setter Property="Padding" Value="15,8,0,8"></Setter>
                 <Setter Property="Template">
@@ -334,7 +335,7 @@
                         <ControlTemplate TargetType="TextBox">
                             <Grid>
                                 <Border x:Name="b" SnapsToDevicePixels="True" CornerRadius="2" BorderThickness="0"
-                                    BorderBrush="{StaticResource Color_Control_UnderLine}" Background="{DynamicResource Color_TextBox_Background}">
+                                    BorderBrush="{StaticResource Color_Control_UnderLine}" Background="{TemplateBinding Background}">
                                 </Border>
                                 <ScrollViewer x:Name="PART_ContentHost" VerticalScrollBarVisibility="Auto"></ScrollViewer>
                             </Grid>
@@ -346,6 +347,12 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{DynamicResource Color_TextBox_Disabled_Foreground}"></Setter>
+                        <Setter Property="Background" Value="{DynamicResource Color_TextBox_Disabled_Background}"></Setter>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
             <Style x:Key="LabelBox_DefaultStyle" TargetType="{x:Type ctrl:LabelBox}">
                 <Setter Property="FontSize" Value="14"></Setter>

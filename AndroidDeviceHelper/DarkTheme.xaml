@@ -26,8 +26,12 @@
     <SolidColorBrush x:Key="Color_ScrollBar_Foreground" Color="#FF5A5A5A"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_ScrollBar_Foreground_Hover" Color="#FF878787"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_ScrollBar_Foreground_Pressed" Color="#FFA6A6A6"></SolidColorBrush>
+    
     <SolidColorBrush x:Key="Color_TextBox_Background" Color="#FF505050"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_TextBox_Watermark" Color="#FFABABAB"></SolidColorBrush>
+    <SolidColorBrush x:Key="Color_TextBox_Disabled_Background" Color="#FF393939"></SolidColorBrush>
+    <SolidColorBrush x:Key="Color_TextBox_Disabled_Foreground" Color="#FFA4A4A4"></SolidColorBrush>
+
     <SolidColorBrush x:Key="Color_LabelBox" Color="#191d22"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_FloorButton_Foreground" Color="#FFf0f0f0"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_FloorButton_Disabled_Foreground" Color="#FF505050"></SolidColorBrush>
@@ -37,6 +41,10 @@
     <SolidColorBrush x:Key="Color_Options_Foreground" Color="#FFD1D1D1"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_CalendarButton_InActive" Color="#a6a6a6"></SolidColorBrush>
     <SolidColorBrush x:Key="Color_ProgressBar_Background" Color="#FF444444"></SolidColorBrush>
+
+
+    <SolidColorBrush x:Key="Color_MessageBox_Background" Color="#FF323232"></SolidColorBrush>
+    <SolidColorBrush x:Key="Color_MessageBox_Button_Hover_Background" Color="#FF171717"></SolidColorBrush>
 
     <DropShadowEffect x:Key="Layer_TitleBar" Color="Black" ShadowDepth="1" Direction="270" BlurRadius="4"></DropShadowEffect>
     <DropShadowEffect x:Key="Layer_NavBarLeft" Color="Black" ShadowDepth="1" Direction="0" BlurRadius="4" Opacity="0.7"></DropShadowEffect>

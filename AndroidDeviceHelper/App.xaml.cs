@@ -34,17 +34,21 @@ namespace AndroidDeviceHelper
                 
             }
             catch(Exception _) { }
-            MainWindow = new MainWindow();
-            try
-            {
-                var brush = new ImageBrush(new BitmapImage(new Uri(Path.GetFullPath(AppSettings.Current.BackgroundPath)))) { Stretch = Stretch.UniformToFill };
-                MainWindow.Background = brush;
-            }
-            catch (Exception _) { }
-            MainWindow.Show();
+            //MainWindow = new MainWindow();
+            //try
+            //{
+            //    var bitmap = new BitmapImage(new Uri(Path.GetFullPath(AppSettings.Current.BackgroundPath)));
+            //    bitmap.Freeze();
+            //    var brush = new ImageBrush() { Stretch = Stretch.UniformToFill };
+            //    brush.Freeze();
+            //    MainWindow.Background = brush;
+            //}
+            //catch (Exception _) { }
+            //MainWindow.Show();
 
+            var msg = "Navigation have been stoped because Unknown Errors occurs. Please contact developers to get more information!";
+            MessageBox.Show("Error(s)", msg, MessageBoxButton.Ok, MessageBoxIcon.Error);
 
-            
         }
     }
 }

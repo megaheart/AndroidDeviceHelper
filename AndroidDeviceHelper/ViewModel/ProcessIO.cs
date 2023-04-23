@@ -1,5 +1,4 @@
-﻿using AndroidDeviceHelper.View.TasksPage.TaskPage;
-using System;
+﻿using System;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
+namespace AndroidDeviceHelper.ViewModel
 {
     public class ProcessIO
     {
@@ -43,7 +42,7 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
                 process.Start();
                 bool isFinished = false;
                 bool timeOut = false;
-                if(timeLimit.HasValue)
+                if (timeLimit.HasValue)
                 {
                     Task.Delay(timeLimit.Value).ContinueWith(t =>
                     {
@@ -76,14 +75,14 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
                 isFinished = true;
                 if (timeOut)
                 {
-                    return new ShellOutputEventArgs(outputQueue.ToArray(), new string[] {"ProcessTimeOut"}, "", args);
+                    return new ShellOutputEventArgs(outputQueue.ToArray(), new string[] { "ProcessTimeOut" }, "", args);
                 }
             }
             catch (Exception ex)
             {
-                while(ex != null)
+                while (ex != null)
                 {
-                    errorQueue.Add((string)ex.Message);
+                    errorQueue.Add(ex.Message);
                     ex = ex.InnerException;
                 }
             }

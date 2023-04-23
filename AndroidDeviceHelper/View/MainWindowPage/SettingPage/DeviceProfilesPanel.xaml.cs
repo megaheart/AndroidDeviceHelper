@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace AndroidDeviceHelper.View.TasksPage.SettingPage
+namespace AndroidDeviceHelper.View.MainWindowPage.SettingPage
 {
     /// <summary>
     /// Interaction logic for DeviceProfilesPanel.xaml

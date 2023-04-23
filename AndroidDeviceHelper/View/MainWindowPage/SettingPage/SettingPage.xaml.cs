@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 
-namespace AndroidDeviceHelper.View.TasksPage.SettingPage
+namespace AndroidDeviceHelper.View.MainWindowPage.SettingPage
 {
     /// <summary>
     /// Interaction logic for SettingPage.xaml

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 //using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AndroidDeviceHelper.View.TasksPage.TaskPage
+namespace AndroidDeviceHelper.ViewModel
 {
     public delegate void ShellOutputEventHandler(ShellOutputEventArgs e);
     public class ShellOutputEventArgs
@@ -117,7 +117,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
         /// </summary>
         public async Task ExecuteAsync()
         {
-            if(commands.Count > 0 && commands.Last() != "exit") { commands.Add("exit"); }
+            if (commands.Count > 0 && commands.Last() != "exit") { commands.Add("exit"); }
             //handlers.Add(null);
             var p = new Process();
             p.StartInfo = info;

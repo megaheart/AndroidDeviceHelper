@@ -13,7 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AndroidDeviceHelper.View.TasksPage.TaskPage
+namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
 {
     /// <summary>
     /// Interaction logic for InstallingApkPanel.xaml
@@ -84,7 +84,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
             //var isSuccess = false;
             ConcurrentBag<string> error = new ConcurrentBag<string>();
 
-            var isSuccess = await InstallApkFile_Core(adbPath, apkPath, connState, error).ConfigureAwait(false);
+            var isSuccess = await InstallApkFileAsync(adbPath, apkPath, connState, error).ConfigureAwait(false);
 
             Dispatcher.Invoke(new Action(() =>
             {
@@ -114,7 +114,7 @@ namespace AndroidDeviceHelper.View.TasksPage.TaskPage
             }));
         }
 
-        private async Task<bool> InstallApkFile_Core(string adbPath, string apkPath, ConnectionState connState, ConcurrentBag<string> error)
+        private async Task<bool> InstallApkFileAsync(string adbPath, string apkPath, ConnectionState connState, ConcurrentBag<string> error)
         {
             var device = connState.DeviceData;
 

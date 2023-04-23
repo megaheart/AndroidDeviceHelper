@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AndroidDeviceHelper.View.TasksPage.TaskPage.TransferingFiles
+namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
 {
     public class FileOpenedEventArgs:RoutedEventArgs
     {
