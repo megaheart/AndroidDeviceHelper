@@ -15,22 +15,25 @@
         <DockPanel>
             <Border DockPanel.Dock="Top">
                 <DockPanel>
-                    <Button Margin="5" Width="22" Height="22" FontSize="20" 
+                    <Button x:Name="PreviousDirectoryBtn" Click="NavigateToPreviousDirectory"
+                            Margin="5" Width="22" Height="22" FontSize="20" 
                             Content="arrow_back" DockPanel.Dock="Left"
-                            IsEnabled="{Binding ElementName=_FileViewer, Path=IsEnabled}"
                             Style="{StaticResource FloorButtonStyle}" 
                             FontFamily="{StaticResource MaterialIcons}"/>
-                    <Button Margin="5" Width="22" Height="22" FontSize="20" 
+                    <Button x:Name="ForwardDirectoryBtn" Click="NavigateToForwardDirectory"
+                            Margin="5" Width="22" Height="22" FontSize="20" 
                             Content="arrow_forward" DockPanel.Dock="Left"
-                            IsEnabled="{Binding ElementName=_FileViewer, Path=IsEnabled}"
                             Style="{StaticResource FloorButtonStyle}" 
-                            FontFamily="{StaticResource MaterialIcons}"/>
-                    <Button Margin="5" Width="22" Height="22" FontSize="20" 
+                            FontFamily="{StaticResource MaterialIcons}">
+                    </Button>
+                    <Button Click="NavigateToParentDirectory"
+                            Margin="5" Width="22" Height="22" FontSize="20" 
                             Content="arrow_upward" DockPanel.Dock="Left"
                             IsEnabled="{Binding ElementName=_FileViewer, Path=IsEnabled}"
                             Style="{StaticResource FloorButtonStyle}" 
                             FontFamily="{StaticResource MaterialIcons}"/>
-                    <Button Margin="5" Width="22" Height="22" FontSize="20" 
+                    <Button Click="RefreshDirectory"
+                            Margin="5" Width="22" Height="22" FontSize="20" 
                             Content="refresh" DockPanel.Dock="Left"
                             IsEnabled="{Binding ElementName=_FileViewer, Path=IsEnabled}"
                             Style="{StaticResource FloorButtonStyle}" 
@@ -96,7 +99,7 @@
                                 </ItemsControl>
                             </StackPanel>
                         </Border>
-                        <Button Margin="0,0,35,0" DockPanel.Dock="Right" Click="ReloadFileList"
+                        <Button Margin="0,0,35,0" DockPanel.Dock="Right" Click="RefreshDirectory"
                                 Style="{StaticResource JellyButtonStyle}" 
                                 Background="{StaticResource Blue}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="200">
                             <StackPanel Orientation="Horizontal">

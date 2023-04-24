@@ -32,9 +32,13 @@ namespace AndroidDeviceHelper
             WindowResizer = new WindowResizer(this);
         }
         private bool accept = false;
-        public static void Show(string message)
+        public static void Show(string message, int height = 250, int width = 540)
         {
-            var box = new MessageBox();
+            var box = new MessageBox()
+            {
+                Width = width,
+                Height = height,
+            };
 
             box.AcceptBtn.Visibility = Visibility.Collapsed;
 
@@ -47,9 +51,14 @@ namespace AndroidDeviceHelper
             box.ShowDialog();
         }
 
-        public static bool Show(string title, string message, MessageBoxButton button = MessageBoxButton.Cancel, MessageBoxIcon icon = MessageBoxIcon.Message)
+        public static bool Show(string title, string message, MessageBoxButton button = MessageBoxButton.Cancel, MessageBoxIcon icon = MessageBoxIcon.Message,
+                                    int height = 250, int width = 540)
         {
-            var box = new MessageBox();
+            var box = new MessageBox()
+            {
+                Width = width,
+                Height = height,
+            };
 
             box.MsgBoxTitle.Text = title;
             box.MsgBoxMessage.Text = message;

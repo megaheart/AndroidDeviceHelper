@@ -352,6 +352,9 @@
                         <Setter Property="Foreground" Value="{DynamicResource Color_TextBox_Disabled_Foreground}"></Setter>
                         <Setter Property="Background" Value="{DynamicResource Color_TextBox_Disabled_Background}"></Setter>
                     </Trigger>
+                    <Trigger Property="IsKeyboardFocused" Value="False">
+                        <Setter Property="CaretBrush" Value="Transparent"></Setter>
+                    </Trigger>
                 </Style.Triggers>
             </Style>
             <Style x:Key="LabelBox_DefaultStyle" TargetType="{x:Type ctrl:LabelBox}">

@@ -14,6 +14,7 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
         public string FileSize { get; set; } = "";
         public string FileName { get; set; } = "";
         public string FileType { get; set; } = "";
+        public string ShortcutLink { get; set; } = "";
 
     }
 }
