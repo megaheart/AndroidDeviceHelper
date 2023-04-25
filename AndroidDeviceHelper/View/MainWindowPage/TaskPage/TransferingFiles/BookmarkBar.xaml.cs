@@ -24,5 +24,14 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
         {
             InitializeComponent();
         }
+
+
+
+        
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

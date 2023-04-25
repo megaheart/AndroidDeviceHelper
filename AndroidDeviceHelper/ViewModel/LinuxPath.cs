@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,5 +100,28 @@ namespace AndroidDeviceHelper.ViewModel
 
             return s.Slice(0, len).ToString();
         }
+        public static string GetFilename(string path)
+        {
+            if (path == null) throw new ArgumentNullException("path");
+            //ReadOnlySpan<char> p = path.AsSpan();
+            //int idx = path.Length - 1;
+
+            //while (idx > -1 && p[idx] == '/') idx--;
+
+            //int mark = idx;
+
+            //while (idx > -1)
+            //{
+            //    if (p[idx] == '/')
+            //    {
+            //        break;
+            //    }
+            //    idx--;
+            //}
+
+            int idx = path.LastIndexOf("/");
+            return path.Substring(idx + 1);
+        }
+
     }
 }

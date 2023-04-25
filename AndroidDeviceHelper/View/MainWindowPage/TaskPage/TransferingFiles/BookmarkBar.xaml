@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles"
+             xmlns:m="clr-namespace:AndroidDeviceHelper.Models"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             d:DesignHeight="200" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Style x:Key="{x:Type ScrollViewer}" TargetType="ScrollViewer" BasedOn="{StaticResource ScrollViewer_AutoToggleStyle}"></Style>
+    </UserControl.Resources>
+    
 </UserControl>

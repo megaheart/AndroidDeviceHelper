@@ -445,6 +445,9 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
+            
+
             <Style TargetType="{x:Type ButtonBase}" x:Key="JellyButtonStyle">
                 <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
                 <Setter Property="Cursor" Value="Hand"></Setter>

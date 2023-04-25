@@ -8,10 +8,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
@@ -30,7 +33,6 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
             //_FileViewer.Files = _files;
 
             AddressBar.KeyUp += AddressBar_KeyUp;
-
         }
 
         //public static readonly DependencyProperty ConnectionStateProperty = DependencyProperty.Register("ConnectionState", typeof(ConnectionState), typeof(TransferingFilesPanel), new UIPropertyMetadata(null));
@@ -42,8 +44,23 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
         public ConnectionState ConnectionState { get; set; }
         private async Task<bool> NavigateTo(string path)
         {
-            _FileViewer.IsEnabled = false;
-            return await LoadFileListAsync(path).ConfigureAwait(false);
+            Dispatcher.Invoke(() =>
+            {
+                _FileViewer.IsEnabled = false;
+            });
+            var r = await LoadFileListAsync(path).ConfigureAwait(false);
+
+            if (r)
+            {
+                var item = bookmarks.FirstOrDefault(p => p.Path == _currentPath);
+                Dispatcher.Invoke(() =>
+                {
+                    BookmarkViewer.SelectedItem = item;
+                    PinBtn.IsChecked = item != null;
+                });
+            }
+
+            return r;
         }
 
         private string _currentPath = "/";
@@ -238,6 +255,13 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
                         else sb.Append(line[j]);
                         j++;
                     }
+
+                    if (model.FileType != "/" && model.FileType != "*" && model.FileType != "|")
+                    {
+                        sb.Append(model.FileType);
+                        model.FileType = "";
+                    }
+
                     model.FileName = sb.ToString();
                     sb.Clear();
                 }
@@ -279,11 +303,12 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
         private readonly ConcurrentStack<string> previousVisitedDir = new ConcurrentStack<string>();
         private readonly ConcurrentStack<string> forwardVisitedDir = new ConcurrentStack<string>();
 
-        public void ResetPage()
+        public async void ResetPage()
         {
             PreviousDirectoryBtn.IsEnabled = false;
             ForwardDirectoryBtn.IsEnabled = false;
-            NavigateTo("/");
+            await LoadBookmark().ConfigureAwait(false);
+            await NavigateTo("/").ConfigureAwait(false);
             previousVisitedDir.Clear();
             forwardVisitedDir.Clear();
         }
@@ -508,6 +533,95 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
         private void Click_PullFile(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private ObservableCollection<FileTransferBookmark> bookmarks;
+
+        private async Task LoadBookmark()
+        {
+            var deviceSerial = ConnectionState.DeviceData?.Serial ?? "";
+            if (File.Exists($"Pinned Directory\\{deviceSerial}.json"))
+            {
+                using (var fileStream = File.OpenRead($"Pinned Directory\\{deviceSerial}.json"))
+                {
+                    var x = await JsonSerializer.DeserializeAsync<IEnumerable<FileTransferBookmark>>(fileStream);
+                    if (x == null) throw new Exception($"Error while read 'Pinned Directory\\{deviceSerial}.json' file");
+                    bookmarks = new ObservableCollection<FileTransferBookmark>(x);
+                }
+            }
+            else
+            {
+                bookmarks = new ObservableCollection<FileTransferBookmark>();
+            }
+
+            Dispatcher.Invoke(new Action(() =>
+            {
+                BookmarkViewer.ItemsSource = bookmarks;
+            }));
+        }
+        private async Task SaveBookmark()
+        {
+            if (!Directory.Exists("Pinned Directory"))
+            {
+                Directory.CreateDirectory("Pinned Directory");
+            }
+            var deviceSerial = ConnectionState.DeviceData?.Serial ?? "";
+            using (var fileStream = File.Open($"Pinned Directory\\{deviceSerial}.json", FileMode.Create))
+            {
+                await JsonSerializer.SerializeAsync(fileStream, bookmarks);
+            }
+        }
+        private void Click_RemoveBookmark(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            FileTransferBookmark bookmark = btn.DataContext as FileTransferBookmark;
+            bookmarks.Remove(bookmark);
+            SaveBookmark().ConfigureAwait(false);
+        }
+        private void Click_TogglePin(object sender, RoutedEventArgs e)
+        {
+            ToggleButton btn = sender as ToggleButton;
+            if(btn.IsChecked == true)
+            {
+                FileTransferBookmark bookmark = new FileTransferBookmark()
+                {
+                    Path = _currentPath,
+                    Name = LinuxPath.GetFilename(_currentPath),
+                };
+                bookmarks.Add(bookmark);
+                BookmarkViewer.SelectedItem = bookmark;
+                SaveBookmark().ConfigureAwait(false);
+            }
+            else
+            {
+                if(bookmarks.Remove(bookmarks.FirstOrDefault(p => p.Path == _currentPath)))
+                {
+                    SaveBookmark().ConfigureAwait(false);
+                }
+            }
+        }
+
+        private async void BookmarkViewer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var bookmark = BookmarkViewer.SelectedItem as FileTransferBookmark;
+            if (bookmark != null)
+            {
+                var result = await NavigateTo(bookmark.Path).ConfigureAwait(false);
+
+                if (!result)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var msg = "The pinned directory doesn't exist in device. Do you want to unpin it?";
+                        var r = MessageBox.Show("No such file or directory", msg, MessageBoxButton.OkCancel, MessageBoxIcon.Warning);
+                        if (r)
+                        {
+                            bookmarks.Remove(bookmark);
+                            SaveBookmark().ConfigureAwait(false);
+                        }
+                    });
+                }
+            }
         }
     }
 }
