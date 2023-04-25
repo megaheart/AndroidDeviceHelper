@@ -1,5 +1,5 @@
-﻿using AndroidDeviceHelper.Native;
-using AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles;
+﻿using AndroidDeviceHelper.Models;
+using AndroidDeviceHelper.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;

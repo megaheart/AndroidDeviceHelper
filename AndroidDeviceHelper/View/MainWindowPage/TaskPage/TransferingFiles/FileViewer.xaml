@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles"
+             xmlns:m="clr-namespace:AndroidDeviceHelper.Models"
              mc:Ignorable="d" Foreground="{StaticResource Color_Foreground}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -35,7 +36,7 @@
                 </ControlTemplate>
             </ListView.Template>
             <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:FileModel}">
+                <DataTemplate DataType="{x:Type m:FileModel}">
                     <Grid DockPanel.Dock="Top" TextBlock.Foreground="{StaticResource Color_Foreground}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"></ColumnDefinition>
@@ -109,32 +110,32 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemsSource>
-                <x:Array Type="{x:Type local:FileModel}">
-                    <local:FileModel FileName="Dir Hello" FileType="/" FileExtension="" FileSize="0KB"></local:FileModel>
-                    <local:FileModel FileName="Dir xxx" FileType="/" FileExtension="" FileSize="0KB"></local:FileModel>
-                    <local:FileModel FileName="Dir ZZZ" FileType="/" FileExtension="" FileSize="0KB"></local:FileModel>
-                    <local:FileModel FileName="Dir shortcut 1" FileType="@" FileExtension="" FileSize="0KB"></local:FileModel>
-                    <local:FileModel FileName="Dir shortcut 2" FileType="@" FileExtension="" FileSize="0KB"></local:FileModel>
-                    <local:FileModel FileName="Hello.png" FileType="*" FileExtension="png" FileSize="100KB"></local:FileModel>
-                    <local:FileModel FileName="Hello 1.bmp" FileType="*" FileExtension="bmp" FileSize="150KB"></local:FileModel>
-                    <local:FileModel FileName="Hello 2 34.jpg" FileType="*" FileExtension="jpg" FileSize="120KB"></local:FileModel>
-                    <local:FileModel FileName="Hello 2 3 4.jpeg" FileType="*" FileExtension="jpeg" FileSize="300KB"></local:FileModel>
-                    <local:FileModel FileName="Document.docx" FileType="*" FileExtension="docx" FileSize="120KB"></local:FileModel>
-                    <local:FileModel FileName="Calculation.xlsx" FileType="*" FileExtension="xlsx" FileSize="160KB"></local:FileModel>
-                    <local:FileModel FileName="Slide.pptx" FileType="*" FileExtension="pptx" FileSize="180KB"></local:FileModel>
-                    <local:FileModel FileName="Document.doc" FileType="*" FileExtension="doc" FileSize="120KB"></local:FileModel>
-                    <local:FileModel FileName="Calculation.xls" FileType="*" FileExtension="xls" FileSize="160KB"></local:FileModel>
-                    <local:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></local:FileModel>
-                    <local:FileModel FileName="Document PDF.pdf" FileType="*" FileExtension="pdf" FileSize="690KB"></local:FileModel>
-                    <local:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></local:FileModel>
-                    <local:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></local:FileModel>
-                    <local:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></local:FileModel>
-                    <local:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></local:FileModel>
-                    <local:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></local:FileModel>
-                    <local:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></local:FileModel>
-                    <local:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></local:FileModel>
-                    <local:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></local:FileModel>
-                    <local:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></local:FileModel>
+                <x:Array Type="{x:Type m:FileModel}">
+                    <m:FileModel FileName="Dir Hello" FileType="/" FileExtension="" FileSize="0KB"></m:FileModel>
+                    <m:FileModel FileName="Dir xxx" FileType="/" FileExtension="" FileSize="0KB"></m:FileModel>
+                    <m:FileModel FileName="Dir ZZZ" FileType="/" FileExtension="" FileSize="0KB"></m:FileModel>
+                    <m:FileModel FileName="Dir shortcut 1" FileType="@" FileExtension="" FileSize="0KB"></m:FileModel>
+                    <m:FileModel FileName="Dir shortcut 2" FileType="@" FileExtension="" FileSize="0KB"></m:FileModel>
+                    <m:FileModel FileName="Hello.png" FileType="*" FileExtension="png" FileSize="100KB"></m:FileModel>
+                    <m:FileModel FileName="Hello 1.bmp" FileType="*" FileExtension="bmp" FileSize="150KB"></m:FileModel>
+                    <m:FileModel FileName="Hello 2 34.jpg" FileType="*" FileExtension="jpg" FileSize="120KB"></m:FileModel>
+                    <m:FileModel FileName="Hello 2 3 4.jpeg" FileType="*" FileExtension="jpeg" FileSize="300KB"></m:FileModel>
+                    <m:FileModel FileName="Document.docx" FileType="*" FileExtension="docx" FileSize="120KB"></m:FileModel>
+                    <m:FileModel FileName="Calculation.xlsx" FileType="*" FileExtension="xlsx" FileSize="160KB"></m:FileModel>
+                    <m:FileModel FileName="Slide.pptx" FileType="*" FileExtension="pptx" FileSize="180KB"></m:FileModel>
+                    <m:FileModel FileName="Document.doc" FileType="*" FileExtension="doc" FileSize="120KB"></m:FileModel>
+                    <m:FileModel FileName="Calculation.xls" FileType="*" FileExtension="xls" FileSize="160KB"></m:FileModel>
+                    <m:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></m:FileModel>
+                    <m:FileModel FileName="Document PDF.pdf" FileType="*" FileExtension="pdf" FileSize="690KB"></m:FileModel>
+                    <m:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></m:FileModel>
+                    <m:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></m:FileModel>
+                    <m:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></m:FileModel>
+                    <m:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></m:FileModel>
+                    <m:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></m:FileModel>
+                    <m:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></m:FileModel>
+                    <m:FileModel FileName="Calculation" FileType="*" FileExtension="" FileSize="160KB"></m:FileModel>
+                    <m:FileModel FileName="Slide" FileType="*" FileExtension="" FileSize="180KB"></m:FileModel>
+                    <m:FileModel FileName="Document PDF" FileType="*" FileExtension="" FileSize="690KB"></m:FileModel>
                 </x:Array>
             </ListView.ItemsSource>
             <ListView.Resources>

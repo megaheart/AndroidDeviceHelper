@@ -42,12 +42,14 @@
                             Content="dns" DockPanel.Dock="Right" Click="OpenFilesTranferPanel"
                             Style="{StaticResource FloorButtonStyle}" 
                             FontFamily="{StaticResource MaterialIcons}"/>
-                    <Button Margin="5" Width="22" Height="22" FontSize="20" 
+                    <Button Click="Click_PushFile"
+                            Margin="5" Width="22" Height="22" FontSize="20" 
                             Content="upload" DockPanel.Dock="Right"
                             IsEnabled="{Binding ElementName=_FileViewer, Path=IsEnabled}"
                             Style="{StaticResource FloorButtonStyle}" 
                             FontFamily="{StaticResource MaterialIcons}"/>
-                    <Button Margin="5" Width="22" Height="22" FontSize="20" 
+                    <Button Click="Click_PullFile"
+                            Margin="5" Width="22" Height="22" FontSize="20" 
                             Content="download" DockPanel.Dock="Right"
                             IsEnabled="{Binding ElementName=_FileViewer, Path=IsEnabled}"
                             Style="{StaticResource FloorButtonStyle}" 
@@ -60,14 +62,15 @@
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="773*"/>
-                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <transferingfiles:FileViewer x:Name="_FileViewer" FileOpened="FileViewer_FileOpened" Grid.ColumnSpan="2"></transferingfiles:FileViewer>
+                <transferingfiles:FileViewer x:Name="_FileViewer" FileOpened="FileViewer_FileOpened" Grid.Column="2"></transferingfiles:FileViewer>
                 <transferingfiles:DownloadsViewer x:Name="FilesTranferPanel" 
-                                                  Width="480" Margin="10" Visibility="Collapsed"></transferingfiles:DownloadsViewer>
-                <Border Background="{StaticResource Color_Sheet}"
-                        Visibility="{Binding ElementName=ErrorMsgViewer, Path=Items.Count, Converter={StaticResource HideEmptyCollectionConverter}}" Grid.ColumnSpan="2">
+                                                  Width="480" Margin="10" Grid.ColumnSpan="2"></transferingfiles:DownloadsViewer>
+                
+                <Border Background="{StaticResource Color_Sheet}" Grid.ColumnSpan="2"
+                        Visibility="{Binding ElementName=ErrorMsgViewer, Path=Items.Count, Converter={StaticResource HideEmptyCollectionConverter}}">
                     <StackPanel>
                         <Border Background="{StaticResource DarkRed}" Margin="40,40,40,10" 
                         Padding="25,10" CornerRadius="3" TextBlock.Foreground="{StaticResource Color_Foreground}"
@@ -108,6 +111,10 @@
                             </StackPanel>
                         </Button>
                     </StackPanel>
+                </Border>
+
+                <Border>
+                    
                 </Border>
             </Grid>
 

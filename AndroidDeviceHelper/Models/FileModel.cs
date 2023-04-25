@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.XPath;
 
-namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
+namespace AndroidDeviceHelper.Models
 {
     public class FileModel
     {

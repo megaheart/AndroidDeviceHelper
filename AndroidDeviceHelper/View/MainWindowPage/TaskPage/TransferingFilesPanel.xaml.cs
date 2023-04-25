@@ -1,6 +1,5 @@
 ﻿using AdvancedSharpAdbClient;
 using AndroidDeviceHelper.Models;
-using AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles;
 using AndroidDeviceHelper.ViewModel;
 using System;
 using System.Collections.Concurrent;
@@ -499,6 +498,16 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
         private void OpenFilesTranferPanel(object sender, RoutedEventArgs e)
         {
             FilesTranferPanel.Visibility = Visibility.Visible;
+        }
+
+        private void Click_PushFile(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void Click_PullFile(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

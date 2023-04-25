@@ -1,23 +1,23 @@
-﻿using AndroidDeviceHelper.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
+namespace AndroidDeviceHelper.Models
 {
-    public class FileTranferProgress: NotifiableObject
+    public class FileTranferProgress : NotifiableObject
     {
         public FileModel File { get; set; }
         public string SaveToFolder { get; set; }
         public bool IsPulling { get; set; }
         private int _progress = 0;
-        public int Progress { 
+        public int Progress
+        {
             get => _progress;
             set
             {
-                if(_progress != value)
+                if (_progress != value)
                 {
                     _progress = value;
                     OnPropertyChanged("Progress");
