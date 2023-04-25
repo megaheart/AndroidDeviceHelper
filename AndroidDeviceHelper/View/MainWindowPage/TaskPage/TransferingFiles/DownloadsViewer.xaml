@@ -222,38 +222,38 @@
                     <x:Array Type="{x:Type m:FileTranferProgress}">
                         <m:FileTranferProgress>
                             <m:FileTranferProgress.File>
-                                <local:FileModel FileName="Document.docx" FileType="*" FileExtension="docx" FileSize="120KB"></local:FileModel>
+                                <m:FileModel FileName="Document.docx" FileType="*" FileExtension="docx" FileSize="120KB"></m:FileModel>
                             </m:FileTranferProgress.File>
                         </m:FileTranferProgress>
                         <m:FileTranferProgress IsCompleted="True">
                             <m:FileTranferProgress.File>
-                                <local:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></local:FileModel>
+                                <m:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></m:FileModel>
                             </m:FileTranferProgress.File>
                         </m:FileTranferProgress>
                         <m:FileTranferProgress IsError="True" Error="Sorry I am fine">
                             <m:FileTranferProgress.File>
-                                <local:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></local:FileModel>
+                                <m:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></m:FileModel>
                             </m:FileTranferProgress.File>
                         </m:FileTranferProgress>
                         <m:FileTranferProgress OpenAfterCompleted="True">
                             <m:FileTranferProgress.File>
-                                <local:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></local:FileModel>
+                                <m:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></m:FileModel>
                             </m:FileTranferProgress.File>
                         </m:FileTranferProgress>
 
                         <m:FileTranferProgress IsPulling="True">
                             <m:FileTranferProgress.File>
-                                <local:FileModel FileName="Document.docx" FileType="*" FileExtension="docx" FileSize="120KB"></local:FileModel>
+                                <m:FileModel FileName="Document.docx" FileType="*" FileExtension="docx" FileSize="120KB"></m:FileModel>
                             </m:FileTranferProgress.File>
                         </m:FileTranferProgress>
                         <m:FileTranferProgress IsPulling="True" IsCompleted="True">
                             <m:FileTranferProgress.File>
-                                <local:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></local:FileModel>
+                                <m:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></m:FileModel>
                             </m:FileTranferProgress.File>
                         </m:FileTranferProgress>
                         <m:FileTranferProgress IsPulling="True" IsError="True" Error="Sorry I am fine">
                             <m:FileTranferProgress.File>
-                                <local:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></local:FileModel>
+                                <m:FileModel FileName="Slide.ppt" FileType="*" FileExtension="ppt" FileSize="180KB"></m:FileModel>
                             </m:FileTranferProgress.File>
                         </m:FileTranferProgress>
                     </x:Array>
