@@ -30,6 +30,8 @@ namespace AndroidDeviceHelper.View.PreviewWindowPage
         public void SetStream(Stream stream)
         {
             Stream = stream;
+            stream.Position = 0;
+            stream.Seek(0, SeekOrigin.Begin);   
             var source = BitmapFrame.Create(stream,
                                       BitmapCreateOptions.None,
                                       BitmapCacheOption.OnLoad);
