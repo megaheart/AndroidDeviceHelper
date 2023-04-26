@@ -84,8 +84,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <transferingfiles:FileViewer x:Name="_FileViewer" FileOpened="FileViewer_FileOpened" Grid.Column="2"></transferingfiles:FileViewer>
-                <transferingfiles:DownloadsViewer x:Name="FilesTranferPanel" Visibility="Collapsed"
-                                                  Width="480" Margin="10" Grid.ColumnSpan="2"></transferingfiles:DownloadsViewer>
                 <Border CornerRadius="3" Margin="0,10,0,0" Width="180">
                     <DockPanel>
                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,6"
@@ -171,6 +169,8 @@
                         </ListView>
                     </DockPanel>
                 </Border>
+                <transferingfiles:DownloadsViewer x:Name="FilesTranferPanel" Visibility="Collapsed"
+                                                  Width="480" Margin="10" Grid.ColumnSpan="2"></transferingfiles:DownloadsViewer>
                 <Border Background="{StaticResource Color_Sheet}" Grid.ColumnSpan="2"
                         Visibility="{Binding ElementName=ErrorMsgViewer, Path=Items.Count, Converter={StaticResource HideEmptyCollectionConverter}}">
                     <StackPanel>

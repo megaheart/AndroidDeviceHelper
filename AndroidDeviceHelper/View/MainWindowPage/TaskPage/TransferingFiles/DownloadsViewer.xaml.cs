@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,11 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
         public DownloadsViewer()
         {
             InitializeComponent();
-            transfers = new ObservableCollection<FileTranferProgress>();
+            //transfers = new ObservableCollection<FileTranferProgress>();
+        }
+
+        public void SetItemsSource(IEnumerable<FileTranferProgress> transfers)
+        {
             FileTranferProgressViewer.ItemsSource = transfers;
         }
 
@@ -42,7 +47,7 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
             FileTranferProgress progress = toggleButton.DataContext as FileTranferProgress;
             if(progress.IsCompleted && progress.IsPulling)
             {
-
+                Process.Start("explorer.exe", progress.SavePath);
             }
         }
         private void OpenFileLocation(object sender, RoutedEventArgs e)
@@ -51,7 +56,7 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage.TransferingFiles
             FileTranferProgress progress = toggleButton.DataContext as FileTranferProgress;
             if (progress.IsCompleted && progress.IsPulling)
             {
-
+                Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(progress.SavePath));
             }
         }
     }

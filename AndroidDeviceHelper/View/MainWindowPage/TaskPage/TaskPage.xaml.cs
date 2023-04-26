@@ -62,6 +62,10 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
 
             _InstallingApkPanel.ConnectionState = null;
             _TransferingFilesPanel.ConnectionState = null;
+
+            Application.Current.MainWindow.Topmost = true;
+            Application.Current.MainWindow.Topmost = false;
+
         }
 
         public void PageClosed()

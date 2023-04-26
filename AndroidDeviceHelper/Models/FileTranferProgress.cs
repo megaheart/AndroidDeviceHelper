@@ -9,7 +9,8 @@ namespace AndroidDeviceHelper.Models
     public class FileTranferProgress : NotifiableObject
     {
         public FileModel File { get; set; }
-        public string SaveToFolder { get; set; }
+        public string FilePath { get; set; }
+        public string SavePath { get; set; }
         public bool IsPulling { get; set; }
         private int _progress = 0;
         public int Progress

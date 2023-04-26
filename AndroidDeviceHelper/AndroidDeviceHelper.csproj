@@ -10,13 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="View\PreviewWindowPage\**" />
-    <EmbeddedResource Remove="View\PreviewWindowPage\**" />
-    <None Remove="View\PreviewWindowPage\**" />
-    <Page Remove="View\PreviewWindowPage\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Fonts\MaterialIcons-Regular.ttf" />
     <None Remove="Fonts\MaterialIconsOutlined-Regular.ttf" />
     <None Remove="Fonts\MaterialIconsRound-Regular.ttf" />

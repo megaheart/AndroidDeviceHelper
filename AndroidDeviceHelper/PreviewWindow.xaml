@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AndroidDeviceHelper"
+        xmlns:ctrl="clr-namespace:AndroidDeviceHelper.View.CustomizedControls"
         SnapsToDevicePixels="True" Topmost="False" UseLayoutRounding="True"
         mc:Ignorable="d" WindowStartupLocation="Manual" x:Name="MainWnd"
         Title="PreviewWindow" MinHeight="650" MinWidth="970" Height="650" Width="970"
@@ -41,9 +42,21 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <ContentControl x:Name="Main" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,20,0,0">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+            <ContentControl x:Name="Main" Margin="0,20,0,0">
 
-        </ContentControl>
+            </ContentControl>
+
+            <ctrl:LoadingSpinner
+                x:Name="LoadingBar"
+                Diameter="150"
+                IsLoading="true"
+                Thickness="5"
+                Color="White"
+            ></ctrl:LoadingSpinner>
+
+        </Grid>
+        
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type ButtonBase}" x:Key="WindowControlStyle">
@@ -66,6 +79,18 @@
                     </Setter>
                 </Style>
             </StackPanel.Resources>
+
+            <Button Margin="0,5,32,5" Width="140" x:Name="DownloadBtn"
+                        VerticalAlignment="Center" Padding="10,5" Click="Click_Download"
+                        Style="{StaticResource RoundFloatButtonStyle}" Background="{StaticResource Green}">
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="download" FontSize="22" Margin="0,0,0,0"
+                               x:Name="Download_Icon" FontFamily="{StaticResource MaterialIcons}"></TextBlock>
+                    <TextBlock x:Name="Download_Content" VerticalAlignment="Center" 
+                               Margin="7,0,20,0">Download</TextBlock>
+                </StackPanel>
+            </Button>
+
             <Button Click="MinimizeWindow" Style="{StaticResource WindowControlStyle}">
                 <Canvas Width="12" Height="10">
                     <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Fill="{DynamicResource Color_Foreground}" StrokeThickness="1">

@@ -1,10 +1,12 @@
 ﻿using AdvancedSharpAdbClient;
 using AndroidDeviceHelper.Models;
 using AndroidDeviceHelper.ViewModel;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -307,6 +309,8 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
         {
             PreviousDirectoryBtn.IsEnabled = false;
             ForwardDirectoryBtn.IsEnabled = false;
+            fileTranfer = new FileTranfer(ConnectionState);
+            FilesTranferPanel.SetItemsSource(fileTranfer.FileTranferProgresses);
             await LoadBookmark().ConfigureAwait(false);
             await NavigateTo("/").ConfigureAwait(false);
             previousVisitedDir.Clear();
@@ -510,16 +514,19 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
                     }));
                 }
             }
-            else if (e.FileModel.FileType == "*")
+            else /*if (e.FileModel.FileType == "*")*/
             {
-                //if (!PreviewWindow.Preview(e.FileModel, null))
-                //{
-
-                //}
+                if (!PreviewWindow.Preview(ConnectionState, e.FileModel, LinuxPath.Combine(_currentPath, e.FileModel.FileName), (IList<FileModel>)_FileViewer.Files))
+                {
+                    var msg = "Not Support";
+                    MessageBox.Show("Preview is not supported for this file type.", msg, MessageBoxButton.Ok, MessageBoxIcon.Warning);
+                }
             }
 
         }
 
+
+        private FileTranfer fileTranfer;
         private void OpenFilesTranferPanel(object sender, RoutedEventArgs e)
         {
             FilesTranferPanel.Visibility = Visibility.Visible;
@@ -527,11 +534,68 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
 
         private void Click_PushFile(object sender, RoutedEventArgs e)
         {
-            
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            //openFileDialog.Multiselect = true;
+            //openFileDialog.Filter = "Picture (*.png, *.jpg, *.bmp)|*.png;*.jpg;*.bmp";
+            //openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            openFileDialog.Multiselect = false;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                var model = new FileModel()
+                {
+                    FileExtension = System.IO.Path.GetExtension(openFileDialog.FileName)?.Substring(1) ?? "",
+                    FileName = System.IO.Path.GetFileName(openFileDialog.FileName),
+                };
+                var progress = fileTranfer.CreateWorker(false, model, openFileDialog.FileName, LinuxPath.Combine(_currentPath, model.FileName));
+                if (progress.IsCompleted)
+                {
+                    NavigateTo(_currentPath).ConfigureAwait(false);
+                }
+                else
+                {
+                    progress.PropertyChanged += (o, e) =>
+                    {
+                        if (e.PropertyName == "IsCompleted")
+                        {
+                            if (progress.IsCompleted)
+                            {
+                                NavigateTo(_currentPath).ConfigureAwait(false);
+                            }
+                        }
+                    };
+                }
+            }
         }
 
         private void Click_PullFile(object sender, RoutedEventArgs e)
         {
+            var models = _FileViewer.SelectedFiles;
+            foreach (var model in models)
+            {
+                VistaSaveFileDialog dialog = new VistaSaveFileDialog
+                {
+                    AddExtension = true,
+                    OverwritePrompt = true,
+                    DefaultExt = "",
+                    FileName = $"{model.FileName}"
+                };
+                if (!string.IsNullOrEmpty(model.FileExtension))
+                {
+                    dialog.Filter = $"{model.FileExtension}|*.{model.FileExtension}";
+                    dialog.DefaultExt = model.FileExtension;
+                }
+                if (dialog.ShowDialog() == true && !string.IsNullOrEmpty(dialog.FileName))
+                {
+                    var _model = new FileModel()
+                    {
+                        FileExtension = System.IO.Path.GetExtension(dialog.FileName)?.Substring(1) ?? "",
+                        FileName = System.IO.Path.GetFileName(dialog.FileName),
+                    };
+                    fileTranfer.CreateWorker(true, _model, LinuxPath.Combine(_currentPath, model.FileName), dialog.FileName);
+                    
+
+                }
+            }
             
         }
 

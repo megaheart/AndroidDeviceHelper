@@ -54,6 +54,7 @@
             <conv:HalfOfHeightToCornerRadius x:Key="GetCornerRadiusFromHalfOfHeight"></conv:HalfOfHeightToCornerRadius>
             <conv:BoolToVisibility x:Key="BoolToVisibilityConverter"/>
             <conv:HideEmptyCollection x:Key="HideEmptyCollectionConverter"></conv:HideEmptyCollection>
+            <conv:InverseVisibility x:Key="InverseVisibilityConverter"></conv:InverseVisibility>
             <!--#endregion-->            
             <!--#region Unknown Group-->
             <DrawingBrush x:Key="Gray_DashedLine" Viewport="0,0,8,7" ViewportUnits="Absolute" TileMode="Tile">
@@ -1401,6 +1402,73 @@
                 </Setter>
 
 
+            </Style>
+            <!--#endregion-->
+            <!--#region Animation-->
+            <Style TargetType="{x:Type ctrl:LoadingSpinner}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ctrl:LoadingSpinner}">
+                            <ControlTemplate.Resources>
+                                <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                                <conv:DiameterAndThicknessToStrokeDashArrayConverter x:Key="DiameterAndThicknessToStrokeDashArrayConverter" />
+                            </ControlTemplate.Resources>
+                            <Ellipse
+                                Width="{TemplateBinding Diameter}"
+                                Height="{TemplateBinding Diameter}"
+                                RenderTransformOrigin="0.5 0.5"
+                                Stroke="{TemplateBinding Color}"
+                                StrokeDashCap="{TemplateBinding Cap}"
+                                StrokeThickness="{TemplateBinding Thickness}"
+                                Visibility="{TemplateBinding IsLoading,
+                                                     Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Ellipse.StrokeDashArray>
+                                    <MultiBinding Converter="{StaticResource DiameterAndThicknessToStrokeDashArrayConverter}">
+                                        <Binding Path="Diameter" RelativeSource="{RelativeSource TemplatedParent}" />
+                                        <Binding Path="Thickness" RelativeSource="{RelativeSource TemplatedParent}" />
+                                        <Binding Path="Percent" RelativeSource="{RelativeSource TemplatedParent}" />
+                                    </MultiBinding>
+                                </Ellipse.StrokeDashArray>
+                                <Ellipse.RenderTransform>
+                                    <RotateTransform x:Name="Rotation" Angle="0" />
+                                </Ellipse.RenderTransform>
+                                <Ellipse.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard RepeatBehavior="Forever">
+                                                <!--<DoubleAnimation
+                                                    Storyboard.TargetName="Rotation"
+                                                    Storyboard.TargetProperty="Angle"
+                                                    From="360" Duration="0:0:0:2"
+                                                    To="0" />-->
+                                                <DoubleAnimationUsingKeyFrames 
+                                                     Storyboard.TargetProperty="Angle" 
+                                                    Storyboard.TargetName="Rotation">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="720"/>
+                                                    <!--<EasingDoubleKeyFrame KeyTime="0:0:1" Value="180"/>-->
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0"/>
+                                                    <!--<EasingDoubleKeyFrame KeyTime="0:0:3" Value="-180"/>-->
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:4" Value="-720"/>
+                                                </DoubleAnimationUsingKeyFrames>
+
+                                                <DoubleAnimationUsingKeyFrames 
+                                                     Storyboard.Target="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                                    Storyboard.TargetProperty="Percent">
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0.05"/>
+                                                    <!--<EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.5"/>-->
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0.9"/>
+                                                    <!--<EasingDoubleKeyFrame KeyTime="0:0:3" Value="0.5"/>-->
+                                                    <EasingDoubleKeyFrame KeyTime="0:0:4" Value="0.05"/>
+                                                </DoubleAnimationUsingKeyFrames>
+
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Ellipse.Triggers>
+                            </Ellipse>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
             </Style>
             <!--#endregion-->
         </ResourceDictionary>
