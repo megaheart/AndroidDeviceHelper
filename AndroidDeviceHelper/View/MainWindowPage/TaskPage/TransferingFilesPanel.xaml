@@ -57,9 +57,74 @@
 
 
                     <Button Margin="5" Width="22" Height="22" FontSize="20" 
-                            Content="dns" DockPanel.Dock="Right" Click="OpenFilesTranferPanel"
+                            DockPanel.Dock="Right" Click="OpenFilesTranferPanel"
                             Style="{StaticResource FloorButtonStyle}" 
-                            FontFamily="{StaticResource MaterialIcons}"/>
+                            FontFamily="{StaticResource MaterialIcons}">
+                        <Grid>
+                            <TextBlock Text="dns" FontSize="20" FontFamily="{StaticResource MaterialIcons}"></TextBlock>
+                            <TextBlock x:Name="TransferingStateTxt" Text="dns" FontSize="20" 
+                                       Visibility="Collapsed"
+                                       FontFamily="{StaticResource MaterialIcons}"
+                                       VerticalAlignment="Top" HorizontalAlignment="Left">
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                                        <GradientStop Color="White" Offset="0.0" />
+                                        <GradientStop x:Name="GradientStop1" Color="#319d2f" Offset="0.4" />
+                                        <GradientStop x:Name="GradientStop2" Color="#319d2f" Offset="0.6" />
+                                        <GradientStop Color="White" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                                <TextBlock.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard RepeatBehavior="Forever">
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetName="GradientStop1"
+                                                    Storyboard.TargetProperty="Offset"
+                                                    From="0.0" To="0.8" Duration="0:0:1"
+                                                    AutoReverse="True" />
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetName="GradientStop2"
+                                                    Storyboard.TargetProperty="Offset"
+                                                    From="0.2" To="1.0" Duration="0:0:1"
+                                                    AutoReverse="True" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </TextBlock.Triggers>
+                            </TextBlock>
+                            <!--<TextBlock Text="arrow_downward" FontSize="16" FontFamily="{StaticResource MaterialIcons}"
+                                       VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="White" Offset="0.0" />
+                                        <GradientStop x:Name="GradientStop3" Color="#558bdd" Offset="0.4" />
+                                        <GradientStop x:Name="GradientStop4" Color="#558bdd" Offset="0.6" />
+                                        <GradientStop Color="White" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                                <TextBlock.Triggers>
+                                    <EventTrigger RoutedEvent="Loaded">
+                                        <BeginStoryboard>
+                                            <Storyboard RepeatBehavior="Forever">
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetName="GradientStop3"
+                                                    Storyboard.TargetProperty="Offset"
+                                                    From="0.0" To="0.8" Duration="0:0:1.5"
+                                                    AutoReverse="True" />
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetName="GradientStop4"
+                                                    Storyboard.TargetProperty="Offset"
+                                                    From="0.2" To="1.0" Duration="0:0:1.5"
+                                                    AutoReverse="True" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </TextBlock.Triggers>
+                            </TextBlock>-->
+                        </Grid>
+                        
+                    </Button>
                     <Button Click="Click_PushFile"
                             Margin="5" Width="22" Height="22" FontSize="20" 
                             Content="upload" DockPanel.Dock="Right"

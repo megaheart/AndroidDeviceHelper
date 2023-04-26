@@ -525,6 +525,33 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
 
         }
 
+        private int _countProgressWorking = 0;
+        private void ObserveProgress(FileTranferProgress progress)
+        {
+            if(progress.IsCompleted == false && progress.IsError == false)
+            {
+                progress.PropertyChanged += (o, e) =>
+                {
+                    if (e.PropertyName == "IsCompleted" || e.PropertyName == "IsError")
+                    {
+                        if (progress.IsCompleted || progress.IsError)
+                        {
+                            _countProgressWorking--;
+                            if (_countProgressWorking == 0)
+                            {
+                                TransferingStateTxt.Visibility = Visibility.Collapsed;
+                            }
+                        }
+                    }
+                };
+                _countProgressWorking++;
+                if(_countProgressWorking > 0)
+                {
+                    TransferingStateTxt.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
 
         private FileTranfer fileTranfer;
         private void OpenFilesTranferPanel(object sender, RoutedEventArgs e)
@@ -563,6 +590,7 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
                             }
                         }
                     };
+                    ObserveProgress(progress);
                 }
             }
         }
@@ -591,8 +619,8 @@ namespace AndroidDeviceHelper.View.MainWindowPage.TaskPage
                         FileExtension = System.IO.Path.GetExtension(dialog.FileName)?.Substring(1) ?? "",
                         FileName = System.IO.Path.GetFileName(dialog.FileName),
                     };
-                    fileTranfer.CreateWorker(true, _model, LinuxPath.Combine(_currentPath, model.FileName), dialog.FileName);
-                    
+                    var progress = fileTranfer.CreateWorker(true, _model, LinuxPath.Combine(_currentPath, model.FileName), dialog.FileName);
+                    ObserveProgress(progress);
 
                 }
             }
